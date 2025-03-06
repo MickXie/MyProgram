@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>js3</title>
+  </head>
+  <body>
+    <script>
+      let obj = new Object();
+      obj.x = 3;
+      obj.y = 4;
+      obj.show = function () {
+        console.log("hellow ");
+      };
+      let obj2 = {
+        x: 3,
+        y: 4,
+        show: function () {
+          console.log("hellow u");
+          return 8;
+        },
+      };
+      console.log(obj2.show());
+      console.log(obj.x + obj.y);
+      obj.show();
+    </script>
+  </body>
+</html>

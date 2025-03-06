@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <title>Photo App</title>
+  </head>
+  <body>
+    <h1>Take a photo</h1>
+    <form id="photo-form">
+      <input type="file" accept="image/*" capture="camera" id="photo-input" />
+      <button type="submit">Save photo</button>
+    </form>
+    <div id="photo-preview"></div>
+
+    <script>
+      const photoForm = document.getElementById("photo-form");
+      const photoInput = document.getElementById("photo-input");
+      const photoPreview = document.getElementById("photo-preview");
+
+      photoForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const file = photoInput.files[0];
+        if (!file) {
+          alert("No file selected");
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const imageData = event.target.result;
+          const image = new Image();
+          image.src = imageData;
+          photoPreview.appendChild(image);
+          const xhr = new XMLHttpRequest();
+          xhr.open("POST", "/save-photo");
+          xhr.setRequestHeader("Content-Type", "application/json");
+          xhr.send(JSON.stringify({ imageData }));
+        };
+        reader.readAsDataURL(file);
+      });
+    </script>
+  </body>
+</html>

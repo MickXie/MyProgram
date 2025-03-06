@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>js5</title>
+  </head>
+  <body>
+    <div id="bi" onclick="change();">to google</div>
+    <div class="bc">to youtube</div>
+    <button onclick="change();">按鈕</button>
+    <script>
+      let d = document.querySelector("#bi");
+      let s = document.querySelector(".bc");
+      d.innerHTML = "gg";
+      d.style.fontSize = "30px";
+      s.innerHTML = "88";
+      change = function () {
+        window.location.href = "http://www.google.com/";
+        d.style.fontSize = "50px";
+      };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,27 @@
+/*使用class.,id#選擇器*/
+.number1 {
+  background-color: aquamarine;
+  text-align: center;
+}
+.number2 {
+  color: red;
+  font-weight: bold;
+  font-size: 50px;
+  padding: 10px;
+  margin: 10px;
+  width: 50%;
+  border: 1px solid;
+}
+.number3 {
+  border: 1px dashed blue;
+  color: red;
+  font-size: 40px;
+  padding: 10px;
+  margin: 10px;
+  width: 50%;
+  height: auto;
+}
+#number1 {
+  background-color: aquamarine;
+  text-align: center;
+}

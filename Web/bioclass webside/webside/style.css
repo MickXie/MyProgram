@@ -1,0 +1,126 @@
+#title {
+  font-size: 45px;
+  text-align: center;
+  font-weight: bold;
+  padding: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: green;
+}
+.content {
+  height: 500px;
+  display: block;
+}
+.content,
+.button,
+.contentimage,
+.da,
+.va,
+.hcp,
+.hca {
+  display: flex;
+}
+.hp {
+  width: 80%;
+}
+.hca {
+  align-items: center;
+  justify-content: center;
+}
+.da {
+  width: 100%;
+  height: auto;
+}
+.db {
+  width: 10%;
+}
+.button {
+  align-items: center;
+  height: 30px;
+}
+.hca {
+  width: 10%;
+}
+.content {
+  height: 500px;
+  width: 80%;
+}
+.contentimage {
+  width: 40%;
+  align-items: center;
+  justify-content: center;
+}
+.hcaim {
+  height: width;
+  width: 70px;
+}
+#homebt {
+  text-decoration: underline;
+}
+#homebt,
+#viewbt,
+#AIbt {
+  font-size: 20px;
+  padding: 10px;
+  text-align: center;
+}
+
+#contentimage {
+  height: 290px;
+  width: 290px;
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 3px;
+}
+#contenttext {
+  width: 60%;
+  text-align: left;
+}
+#Acanva {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.AI,
+.va {
+  display: none;
+}
+.va {
+  width: auto;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.vablock {
+  height: auto;
+  width: auto;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+.vacontent {
+  height: auto;
+  width: auto;
+}
+#vabimage {
+  height: 250px;
+  width: 250px;
+  padding-bottom: 10px;
+}
+#vatitle,
+#vatext {
+  height: 20px;
+  width: auto;
+  text-align: center;
+  padding-bottom: 5px;
+}
+#vatitle {
+  font-size: 20px;
+}
+#vatext {
+  font-size: 16px;
+}
+#stop {
+  display: none;
+}

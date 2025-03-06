@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.sound.min.js"></script>
+    <script src="https://unpkg.com/ml5@0.5.0/dist/ml5.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./style.css" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>bio</title>
+  </head>
+  <body style="background-color: rgb(255, 255, 255)">
+    <div id="title">Bio-AI-identify-butterfly</div>
+    <div class="da">
+      <div class="db"></div>
+      <div class="hp">
+        <div class="button">
+          <div id="homebt" onclick="ph();">Home</div>
+          <div id="viewbt" onclick="pv();">View</div>
+          <div id="AIbt" onclick="pA();">AI</div>
+        </div>
+        <div class="hcp">
+          <div class="hca">
+            <img src="./html/l.png" class="hcaim" onclick="changel();" />
+          </div>
+          <div class="content">
+            <div class="contentimage">
+              <img id="contentimage" src="./classpicture/1.png" />
+            </div>
+            <div id="contenttext">
+              <div style="height: 100px"></div>
+              <h1 style="text-indent: 0" id="ctt">四點素尺蛾</h1>
+              <p style="text-indent: 30px" id="ctc">
+                本種展翅長約 32-40
+                mm，觸角絲狀、黃褐色，整體粉白色，前翅寬，前緣黃褐色，頂角直角狀，外緣向外彎，翅身密佈細黑點斑，端室斑呈小黑點斑，後中線呈灰色橫線紋，後翅寬，紋路同前翅者，端室斑較前翅者稍大。
+              </p>
+            </div>
+          </div>
+          <div class="hca">
+            <img src="./html/r.png" class="hcaim" onclick="changer();" />
+          </div>
+        </div>
+        <div class="va">
+          <div class="vablock">
+            <div class="vacontent1" class="vacontent">
+              <img src="./classpicture/1.png" id="vabimage" />
+              <div id="vatitle">四點素尺蛾</div>
+              <div id="vatext">尺蛾科</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent2" class="vacontent">
+              <img src="./classpicture/2.png" id="vabimage" />
+              <div id="vatitle">雌黃粉尺蛾</div>
+              <div id="vatext">尺蛾科</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent3" class="vacontent">
+              <img src="./classpicture/3.png" id="vabimage" />
+              <div id="vatitle">台灣瑟弄蝶</div>
+              <div id="vatext">弄蝶科</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./classpicture/4.png" id="vabimage" />
+              <div id="vatitle">巾夜蛾</div>
+              <div id="vatext">裳夜蛾科</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./classpicture/5.png" id="vabimage" />
+              <div id="vatitle">中南裳蛾</div>
+              <div id="vatext">裳夜蛾科</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./classpicture/6.png" id="vabimage" />
+              <div id="vatitle">白點卡裳蛾</div>
+              <div id="vatext">裳夜蛾科</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./classpicture/7.png" id="vabimage" />
+              <div id="vatitle">弧緣貧裳蛾</div>
+              <div id="vatext">裳夜蛾科</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./classpicture/8.jpg" id="vabimage" />
+              <div id="vatitle">曲帶浮裳蛾(長鬚裳蛾)</div>
+              <div id="vatext">裳夜蛾科</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./html/p5js.svg" id="vabimage" />
+              <div id="vatitle">GG9</div>
+              <div id="vatext">gg9</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./html/p5js.svg" id="vabimage" />
+              <div id="vatitle">GG10</div>
+              <div id="vatext">gg10</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./html/p5js.svg" id="vabimage" />
+              <div id="vatitle">GG11</div>
+              <div id="vatext">gg11</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./html/p5js.svg" id="vabimage" />
+              <div id="vatitle">GG12</div>
+              <div id="vatext">gg12</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./html/p5js.svg" id="vabimage" />
+              <div id="vatitle">GG13</div>
+              <div id="vatext">gg13</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./html/p5js.svg" id="vabimage" />
+              <div id="vatitle">GG14</div>
+              <div id="vatext">gg14</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./html/p5js.svg" id="vabimage" />
+              <div id="vatitle">GG15</div>
+              <div id="vatext">gg15</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./html/p5js.svg" id="vabimage" />
+              <div id="vatitle">GG16</div>
+              <div id="vatext">gg16</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./html/p5js.svg" id="vabimage" />
+              <div id="vatitle">GG17</div>
+              <div id="vatext">gg17</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./html/p5js.svg" id="vabimage" />
+              <div id="vatitle">GG18</div>
+              <div id="vatext">gg18</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./html/p5js.svg" id="vabimage" />
+              <div id="vatitle">GG19</div>
+              <div id="vatext">gg19</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./html/p5js.svg" id="vabimage" />
+              <div id="vatitle">GG20</div>
+              <div id="vatext">gg20</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./html/p5js.svg" id="vabimage" />
+              <div id="vatitle">GG21</div>
+              <div id="vatext">gg21</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./html/p5js.svg" id="vabimage" />
+              <div id="vatitle">GG22</div>
+              <div id="vatext">gg22</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./html/p5js.svg" id="vabimage" />
+              <div id="vatitle">GG23</div>
+              <div id="vatext">gg23</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./html/p5js.svg" id="vabimage" />
+              <div id="vatitle">GG24</div>
+              <div id="vatext">gg24</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./html/p5js.svg" id="vabimage" />
+              <div id="vatitle">GG25</div>
+              <div id="vatext">gg25</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./html/p5js.svg" id="vabimage" />
+              <div id="vatitle">GG266</div>
+              <div id="vatext">gg26</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./html/p5js.svg" id="vabimage" />
+              <div id="vatitle">GG27</div>
+              <div id="vatext">gg27</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./html/p5js.svg" id="vabimage" />
+              <div id="vatitle">GG28</div>
+              <div id="vatext">gg28</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./html/p5js.svg" id="vabimage" />
+              <div id="vatitle">GG29</div>
+              <div id="vatext">gg29</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./html/p5js.svg" id="vabimage" />
+              <div id="vatitle">GG30</div>
+              <div id="vatext">gg30</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./html/p5js.svg" id="vabimage" />
+              <div id="vatitle">GG31</div>
+              <div id="vatext">gg31</div>
+            </div>
+          </div>
+          <div class="vablock">
+            <div class="vacontent">
+              <img src="./html/p5js.svg" id="vabimage" />
+              <div id="vatitle">GG32</div>
+              <div id="vatext">gg32</div>
+            </div>
+          </div>
+        </div>
+        <div class="AI">
+          <button onclick="Start();">start</button>
+          <button onclick="pausecanva();" id="stop">pause</button>
+          <button onclick="stopDrawing();">close</button>
+          <div id="Acanva"></div>
+        </div>
+      </div>
+      <div class="db"></div>
+    </div>
+    <script src="./main.js"></script>
+    <script src="./hp.js"></script>
+    <script src="./va.js"></script>
+    <script src="./showimage.js"></script>
+  </body>
+</html>
