@@ -50,3 +50,14 @@ int main()
     } // 會跳過迴圈剩下的部分，直接回到判斷迴圈條件的步驟。
     system("pause");
 }
+/**
+ *  ctrl+f 搜尋
+ *  ctrl+h 代換
+ *  shift+ctrl+p 指令
+ *  ctrl+p 著檔案
+ *
+ *
+ *
+ *
+ *
+ *  */
