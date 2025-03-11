@@ -24,11 +24,13 @@ int main()
     cin >> choice;
     if (choice == "A")
     {
-        CompanyA::printMessage();
+        using namespace CompanyA;
+        printMessage();
     }
     else if (choice == "B")
     {
-        CompanyB::printMessage();
+        using namespace CompanyB;
+        printMessage();
     }
     system("pause");
     return 0;
