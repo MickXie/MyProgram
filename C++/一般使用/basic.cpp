@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 using namespace std;
+int val;
 int main()
 {
     int x = 3;
@@ -47,6 +48,11 @@ int main()
         if (i % 2 == 1)
             continue;
         cout << i << '\n';
-    } // 會跳過迴圈剩下的部分，直接回到判斷迴圈條件的步驟。
+    }
+    int val = 10; // val is local here
+    cout << "Value of global val is " << ::val;
+    cout << "\nValue of local val is " << val;
+    return 0; // 會跳過迴圈剩下的部分，直接回到判斷迴圈條件的步驟。
     system("pause");
+    
 }
