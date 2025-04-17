@@ -1,4 +1,6 @@
 #include <iostream>
+#include <memory>
+#include <string>
 #include "Homework.h"
 using namespace std;
 
@@ -77,5 +79,18 @@ int main()
      emp = new Homework6::PartTimeEmployee("Bob", 202, 100, 16);
      emp->displayInfo();
      */
+    int a = 9;
+    auto p = make_shared<int>(a); // object to which p points has one user
+    auto q(p);                    // p and q point to the same object; q is a copy of p
+    // object to which p and q point has two users
+    auto r = make_shared<int>(a); // int to which r points has one user
+    r = q;                        // assign to r, making it point to a different address
+    // increase the use count for the object to which q points
+    // reduce the use count of the object to which r had pointed
+    // the object r had pointed to has no users; that object is
+    // automatically freed
+    cout << r.unique();    // print out whether p.use_count() is 1 or not
+    cout << r.use_count(); // print out number of objects sharing with r
+    cout << r.unique();
     return 0;
 }

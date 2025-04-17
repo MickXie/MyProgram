@@ -1,0 +1,189 @@
+#include <iostream>
+#include <iomanip>
+#include <memory>
+using namespace std;
+namespace Homework1
+{
+    struct datainput
+    {
+        double x, y, z;
+    };
+    class shape
+    {
+    public:
+        shape() = default;
+        shape(double x, double y) : width(x), height(y) {}
+        virtual ~shape() {}
+        virtual double area()
+        {
+            return 0.0;
+        } // pure virtual function
+    protected:
+        double getw()
+        {
+            return width;
+        }
+        double geth()
+        {
+            return height;
+        } // coordinates of the shape
+    private:
+        double width, height; // coordinates of the shape
+    };
+    class rectangle : public shape
+    {
+    public:
+        rectangle(double w, double h) : shape(w, h) {}
+        double area() override
+        {
+            return getw() * geth();
+        }
+    };
+    class triangle : public shape
+    {
+    public:
+        triangle(double w, double h) : shape(w, h) {}
+        double area() override
+        {
+            return getw() * geth() * 0.5;
+        }
+    }; // forward declaration
+}
+namespace Homework2
+{
+    class Clock
+    {
+    private:
+        int hour, minute, second;
+
+    public:
+        Clock() = default;
+        Clock(double h, double m, double s) : hour(h), minute(m), second(s) {}
+        Clock(Clock &x) : hour(x.hour), minute(x.minute), second(x.second) {}
+        void showtime()
+        {
+            cout << hour << ":"
+                 << setw(2) << setfill('0') << minute << ":"
+                 << setw(2) << setfill('0') << second << endl;
+        }
+        void tick()
+        {
+            second++;
+            if (second >= 60)
+            {
+                minute += static_cast<int>(second / 60);
+                second = static_cast<int>(second) % 60;
+            }
+            if (minute >= 60)
+            {
+                hour += static_cast<int>(minute / 60);
+                minute = static_cast<int>(minute) % 60;
+            }
+            hour = hour % 24;
+        }
+    };
+}
+namespace Homework3
+{
+    class Animal
+    {
+    public:
+        Animal() = default;
+        virtual void makeSound()
+        {
+            cout << " Animal makes a sound " << endl;
+        }
+        virtual ~Animal() {}
+    };
+    class Dog : public Animal
+    {
+    public:
+        void makeSound() override
+        {
+            cout << " Dog barks " << endl;
+        }
+        ~Dog() {}
+    };
+    class Cat : public Animal
+    {
+    public:
+        void makeSound() override
+        {
+            cout << " Cat meows " << endl;
+        }
+        ~Cat() {}
+    };
+}
+namespace Homework4
+{
+    class Vehicle
+    {
+    private:
+        double vehiclePrice;
+
+    public:
+        Vehicle() = default;
+        Vehicle(double price) : vehiclePrice(price) {}
+        virtual ~Vehicle() {}
+        double get_v_price() { return vehiclePrice; }
+    };
+    class FourWheeler
+    {
+    private:
+        double wheelsPrice;
+
+    public:
+        FourWheeler() = default;
+        FourWheeler(double price) : wheelsPrice(price) {}
+        double get_w_price() { return wheelsPrice; }
+        virtual ~FourWheeler() {}
+    };
+    class Car : public Vehicle, public FourWheeler
+    {
+    private:
+        double carPrice;
+
+    public:
+        Car() = default;
+        Car(double v_price, double w_price, double c_price) : Vehicle(v_price), FourWheeler(w_price), carPrice(c_price) {}
+        ~Car() {}
+        double totalCost()
+        {
+            return get_v_price() + get_w_price() + carPrice;
+        };
+    };
+
+}
+namespace Homework5
+{
+    class car
+    {
+    private:
+        static int speed_limit;
+
+    public:
+        int speed;
+        car() = default;
+        car(int s) : speed(s) {}
+        ~car() {}
+        int checkSpeed()
+        {
+            cout << (speed > speed_limit ? 1 : 0) << endl;
+        }
+        static void getLimit(int lt)
+        {
+            speed_limit = lt;
+        }
+    };
+}
+int main()
+{
+
+    Homework1::datainput data;
+    cout << "Enter the vehicle price, wheels' price and car price: " << endl;
+    cin >> data.x;
+    cin >> data.y;
+    cin >> data.z;
+    Homework4::Car car(data.x, data.y, data.z);
+    cout << "Total cost of the car : " << car.totalCost() << endl;
+}
