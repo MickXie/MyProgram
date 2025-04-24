@@ -1,0 +1,63 @@
+﻿using System;// https://aka.ms/new-console-template for more information
+namespace HelloWorld
+{
+    static class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello, World!");
+            #region wtf
+            //用來摺疊代碼,像區塊一樣    
+            //為預處理指令,只有在編輯時有用
+            //編譯時會自動刪除
+            #endregion
+            #region 變量
+            //變量
+            //sbyte -128~~127
+            //int   +-億
+            //short +-五位數
+            //long
+            sbyte sb = 127;
+            Console.WriteLine("請輸入你的名字:" + sb);
+            #endregion
+            #region 無符號
+
+            // uint
+            // ulong
+            // byte
+            #endregion
+            #region 浮點
+            double d = 3.14;
+            float f = 3.14f;
+            decimal de = 3.14m;
+            //decimal是精度最高的,但是運算速度最慢
+            //要加m在後面
+            //這裡要加入f在後面是因為C#的小數默認類型是double
+            #endregion
+            #region 字符串
+            bool b = true;
+            bool b2 = false;
+            //bool是布林值,只有true和false兩個值
+            Console.WriteLine(b + "_" + b2);
+            //字串是不可變的,所以要用StringBuilder來改變字串
+            //StringBuilder是可變的,但是要用using來引用命名空間
+            #endregion
+            #region 變量命名規則
+            //扁兩用
+            //nameMy = "123"; //變量命名規則,不能用中文命名
+            //類別命名規則,第一個字母要大寫
+            //變量命名規則,不能用中文命名   
+            //變量命名規則,不能用數字開頭
+            //變量命名規則,不能用特殊符號命名
+            //變量命名規則,不能用關鍵字命名
+            //變量命名規則,不能用保留字命名
+            //變量命名規則,不能用空格命名
+            //變量命名規則,不能用下劃線開頭
+            //變量命名規則,不能用下劃線結尾
+            //NameMy = "123"; //類別命名規則,第一個字母要大寫
+            #endregion
+            
+        }
+    }
+
+}
