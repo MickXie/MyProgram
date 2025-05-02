@@ -96,6 +96,15 @@ namespace HelloWorld
             //Enum.Parse(typeof(E_Result), "E_Fail")//將字串轉換成枚舉類型,這裡要用typeof來指定類型,不然會報錯
             Console.WriteLine(result.ToString());//將枚舉轉換成字串,這裡要用ToString()來轉換,不然會報錯
             Console.WriteLine("{0}{1}{2}{3}", result, result, result, result);//將枚舉轉換成整數,這裡要用(int)來轉換,不然會報錯
+            int[] arr = new int[5];//定義一個整數陣列,這裡要用new來初始化,不然會報錯
+            int[] axr = new int[5] { 1, 2, 3, 4, 5 };//定義一個整數陣列,這裡要用new來初始化,不然會報錯
+            int[] adr = { 1, 2, 3, 4, 5 };//定義一個整數陣列,這裡要用new來初始化,不然會報錯
+            int[] arr2 = new int[6];//定義一個整數陣列,這裡要用new來初始化,不然會報錯
+            for (int j = 0; j < arr.Length; j++)
+            {
+                arr2[i] = axr[i];//輸出陣列的值,這裡要用arr[j]來輸出,不然會報錯
+            }
+            axr = arr2;//給陣列賦值,這裡要用arr[i]來賦值,不然會報錯
         }
     };
 
