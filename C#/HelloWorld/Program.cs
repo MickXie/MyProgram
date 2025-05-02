@@ -56,7 +56,7 @@ namespace HelloWorld
             //變量命名規則,不能用下劃線結尾
             //NameMy = "123"; //類別命名規則,第一個字母要大寫
             #endregion
-            
+
         }
     }
 
