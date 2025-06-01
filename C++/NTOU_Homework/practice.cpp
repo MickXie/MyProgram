@@ -79,6 +79,7 @@ int main()
      emp = new Homework6::PartTimeEmployee("Bob", 202, 100, 16);
      emp->displayInfo();
      */
+    /*
     int a = 9;
     auto p = make_shared<int>(a); // object to which p points has one user
     auto q(p);                    // p and q point to the same object; q is a copy of p
@@ -92,5 +93,25 @@ int main()
     cout << r.unique();    // print out whether p.use_count() is 1 or not
     cout << r.use_count(); // print out number of objects sharing with r
     cout << r.unique();
+    */
+    using namespace Homework7;
+    Vector v1(1, 2);
+    Vector v2(3, 4);
+    Vector sum = v1 + v2;
+    Vector diff = v1 - v2;
+    double dot = v1 * v2;
+    cout << "v1: " << v1 << endl;
+    cout << "v2: " << v2 << endl;
+    cout << "Sum: " << sum << endl;
+    cout << "Difference: " << diff << endl;
+    cout << "Dot product: " << dot << endl;
+    if (v1 == v2)
+    {
+        cout << "v1 and v2 are equal" << endl;
+    }
+    else
+    {
+        cout << "v1 and v2 are not equal" << endl;
+    }
     return 0;
 }
