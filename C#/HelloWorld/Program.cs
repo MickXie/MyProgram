@@ -70,7 +70,7 @@ namespace HelloWorld
             //變量命名規則,不能用下劃線結尾
             //NameMy = "123"; //類別命名規則,第一個字母要大寫
             #endregion
-
+            #region 數組
             int i = 0;
             Console.WriteLine(i < 0 ? "i小於0" : "i大於0");
             E_Result result = E_Result.E_Success;
@@ -93,7 +93,7 @@ namespace HelloWorld
                     break;
             }
             result = (E_Result)Enum.Parse(typeof(E_Result), "E_Success");//將字串轉換成枚舉類型,這裡要用typeof來指定類型,不然會報錯
-            //Enum.Parse(typeof(E_Result), "E_Fail")//將字串轉換成枚舉類型,這裡要用typeof來指定類型,不然會報錯
+                                                                         //Enum.Parse(typeof(E_Result), "E_Fail")//將字串轉換成枚舉類型,這裡要用typeof來指定類型,不然會報錯
             Console.WriteLine(result.ToString());//將枚舉轉換成字串,這裡要用ToString()來轉換,不然會報錯
             Console.WriteLine("{0}{1}{2}{3}", result, result, result, result);//將枚舉轉換成整數,這裡要用(int)來轉換,不然會報錯
             int[] arr = new int[5];//定義一個整數陣列,這裡要用new來初始化,不然會報錯
@@ -105,6 +105,12 @@ namespace HelloWorld
                 arr2[i] = axr[i];//輸出陣列的值,這裡要用arr[j]來輸出,不然會報錯
             }
             axr = arr2;//給陣列賦值,這裡要用arr[i]來賦值,不然會報錯
+            int [,] arr3 = new int[2, 3];//定義一個二維陣列,這裡要用new來初始化,不然會報錯
+            int[,] arr4 = new int[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } };//定義一個二維陣列,這裡要用new來初始化,不然會報錯
+            int[,] arr5 = { { 1, 2, 3 }, { 4, 5, 6 } };//定義一個二維陣列,這裡要用new來初始化,不然會報錯
+            int [][] arr6 = new int[2][];//定義一個不規則陣列,這裡要用new來初始化,不然會報錯
+            int[][] arr7 = new int[2][] { new int[3] { 1, 2, 3 }, new int[4] { 4, 5, 6, 7 } };//定義一個不規則陣列,這裡要用new來初始化,不然會報錯
+            int[][] arr8 = { new int[3] { 1, 2, 3 }, new int[4] { 4, 5, 6, 7 } };//定義一個不規則陣列,這裡要用new來初始化,不然會報錯
         }
     };
 

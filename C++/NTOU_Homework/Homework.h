@@ -238,4 +238,56 @@ namespace Homework6
         }
     };
 }
+namespace Homework7
+{
+    class Vector
+    {
+    private:
+        double x, y;
+
+    public:
+        // 建構函數
+        Vector(double x = 0, double y = 0) : x(x), y(y) {}
+
+        // 重載 + 運算子（成員函數形式）
+        Vector operator+(const Vector &other) const
+        {
+            return Vector(x + other.x, y + other.y);
+        }
+
+        // 重載 - 運算子
+        Vector operator-(const Vector &other) const
+        {
+            return Vector(x - other.x, y - other.y);
+        }
+
+        // 重載 * 運算子（向量點積）
+        double operator*(const Vector &other) const
+        {
+            return x * other.x + y * other.y;
+        }
+
+        // 重載 = 運算子
+        Vector &operator=(const Vector &other)
+        {
+            x = other.x;
+            y = other.y;
+            return *this;
+        }
+
+        // 重載 == 運算子
+        bool operator==(const Vector &other) const
+        {
+            return (x == other.x) && (y == other.y);
+        }
+
+        // 重載 << 運算子（必須是非成員函數）
+        friend ostream &operator<<(ostream &os, const Vector &v)
+        {
+            os << "(" << v.x << ", " << v.y << ")";
+            return os;
+        }
+    };
+
+}
 #endif
