@@ -2,6 +2,13 @@
 #define HOMEWORK_H
 #include <iostream>
 #include <iomanip>
+#include <unordered_map>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include <stdlib.h>
+#include <time.h>
+#include <assert.h>
 using namespace std;
 namespace Homework1
 {
@@ -290,4 +297,433 @@ namespace Homework7
     };
 
 }
+namespace Homework8
+{
+    template <typename T>
+    class Box
+    {
+    private:
+        T content;
+
+    public:
+        void set(T value) { content = value; }
+        T get() { return content; }
+    };
+}
+namespace Homework9
+{
+    template <typename T>
+    void print_max(T *a, int &b)
+    {
+        for (int i = 0; i < b - 1; i++)
+        {
+            for (int j = 0; j < b - i - 1; j++)
+            {
+                if (a[j] > a[j + 1])
+                {
+                    swap(a[j], a[j + 1]);
+                }
+            }
+        }
+        cout << "The maximum value is: " << a[b - 1] << endl;
+    }
+}
+namespace Homework10
+{
+    struct Node
+    {
+        int data;
+        int order; // the order of generation
+        Node *next;
+        static int counter;
+
+        // Constructor
+        Node()
+        {
+            data = rand() % 100; // assign random number to data
+            order = counter++;   // use static counter to track generation order
+            next = nullptr;
+        }
+
+        // Destructor
+        ~Node()
+        {
+            // cout << "Destroying Node with order: " << order << endl;
+        }
+
+        // Overload '<' operator
+        bool operator<(Node &other)
+        {
+            return this->data < other.data;
+        }
+
+        // Overload '<<' operator (friend function)
+        friend ostream &operator<<(ostream &os, const Node &node)
+        {
+            os << "(" << node.data << ", order=" << node.order << ")";
+            return os;
+        }
+    };
+
+    int Node::counter = 0; // initialize static counter
+
+    // Template Bubble Sort
+    template <class T>
+    void bubbleSort(T a[], int n)
+    {
+        for (int i = 0; i < n - 1; i++)
+            for (int j = n - 1; i < j; j--)
+                if (a[j] < a[j - 1])
+                    swap(a[j], a[j - 1]);
+    }
+}
+namespace homework11
+{
+    struct SolType
+    {
+        int index1;
+        int index2;
+        SolType(int i1, int i2) : index1(i1), index2(i2) {}
+        friend ostream &operator<<(ostream &os, const SolType &st)
+        {
+            if (st.index2 == 1)
+            {
+                os << "[" << st.index1 + 1 << ",";
+            }
+            else
+            {
+                os << st.index1 + 1 << "]";
+            }
+
+            return os;
+        }
+    };
+    template <typename T>
+    class Solution
+    {
+    private:
+        vector<SolType> sol;
+        void bubbleSort(vector<T> &a)
+        {
+            int n = a.end() - a.begin();
+            for (int i = 0; i < n - 1; i++)
+                for (int j = n - 1; i < j; j--)
+                    if (a[j] < a[j - 1])
+                        swap(a[j], a[j - 1]);
+        }
+        void FindTwoSum(vector<T> &num, T target)
+        {
+            bubbleSort(num);
+            unordered_map<T, int> n2;
+            for (auto n1 = num.begin(); n1 != num.end(); ++n1)
+            {
+                if (n2.find(target - *n1) != n2.end())
+                {
+                    sol.emplace_back(n2[target - *n1], 1);
+                    sol.emplace_back(n1 - num.begin(), 2);
+                    break;
+                }
+                else
+                {
+                    n2.insert({*n1, n1 - num.begin()});
+                }
+            }
+            if (sol.empty())
+            {
+                cout << "No solution found." << endl;
+            }
+            else if (sol.size() == 2)
+            {
+                for (const auto &s : sol)
+                {
+                    cout << s;
+                }
+            }
+        }
+
+    public:
+        Solution() = default;
+        Solution(vector<T> &num, T target)
+        {
+            FindTwoSum(num, target);
+        }
+        ~Solution() {}
+    };
+}
+namespace Homework12
+{
+    class Solution
+    {
+    public:
+        vector<vector<int>> threeSum(vector<int> &nums)
+        {
+            vector<vector<int>> result;
+            sort(nums.begin(), nums.end());
+            int n = nums.size();
+
+            for (int i = 0; i < n - 2; ++i)
+            {
+                if (i > 0 && nums[i] == nums[i - 1])
+                    continue; // skip duplicates
+                int left = i + 1;
+                int right = n - 1;
+                while (left < right)
+                {
+                    int sum = nums[i] + nums[left] + nums[right];
+                    if (sum == 0)
+                    {
+                        result.push_back({nums[i], nums[left], nums[right]});
+                        while (left < right && nums[left] == nums[left + 1])
+                            left++; // skip duplicates
+                        while (left < right && nums[right] == nums[right - 1])
+                            right--; // skip duplicates
+                        left++;
+                        right--;
+                    }
+                    else if (sum < 0)
+                        left++;
+                    else
+                        right--;
+                }
+            }
+
+            return result;
+        }
+    };
+}
+namespace Homework13
+{
+    enum class suit : short
+    {
+        SPADE,
+        HEART,
+        DIAMOND,
+        CLUB
+    };
+
+    class pips
+    {
+    public:
+        pips(int val) : v(val) { assert(v > 0 && v < 14); } // 點數
+        friend ostream &operator<<(ostream &out, const pips &p);
+        int get_pips() { return v; }
+
+    private:
+        int v;
+    };
+
+    class card
+    {
+    public:
+        card() : s(suit::SPADE), v(1) {}
+        card(suit st, pips pv) : s(st), v(pv) {}
+        friend ostream &operator<<(ostream &out, const card &c);
+        suit get_suit() { return s; }
+        pips get_pips() { return v; }
+
+    private:
+        suit s;
+        pips v;
+    };
+
+    ostream &operator<<(ostream &os, const suit &s)
+    {
+        os << static_cast<std::underlying_type<suit>::type>(s);
+        return os;
+    }
+
+    ostream &operator<<(ostream &os, const pips &p)
+    {
+        os << p.v;
+        return os;
+    }
+
+    ostream &operator<<(ostream &os, const card &c)
+    {
+        os << c.v << c.s;
+        return os;
+    }
+
+    void init_deck(vector<card> &d)
+    {
+        int i;
+        for (i = 1; i < 14; i++)
+        {
+            card c(suit::SPADE, i);
+            d[i - 1] = c;
+            // cout << i << " ";
+        }
+        // cout << endl;
+        for (i = 1; i < 14; i++)
+        {
+            card c(suit::HEART, i);
+            d[i + 12] = c;
+            // cout << i << " ";
+        }
+        // cout << endl;
+        for (i = 1; i < 14; i++)
+        {
+            card c(suit::DIAMOND, i);
+            d[i + 25] = c;
+            // cout << i << " ";
+        }
+        // cout << endl;
+        for (i = 1; i < 14; i++)
+        {
+            card c(suit::CLUB, i);
+            d[i + 38] = c;
+            // cout << i << " ";
+        }
+        // cout << endl;
+    }
+
+    void print(vector<card> &deck)
+    {
+        for (auto p = deck.begin(); p != deck.end(); ++p)
+        { // for (auto card_val: deck) cout << card_val
+            cout << *p;
+        }
+        cout << endl;
+    }
+
+    bool is_flush(vector<card> &hand)
+    {
+        suit s = hand[0].get_suit();
+        for (auto p = hand.begin(); p != hand.end(); ++p)
+        {
+            if (s != p->get_suit())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    bool is_straight(vector<card> &hand)
+    {
+        int pips_v[5];
+        int i = 0;
+        for (auto p = hand.begin(); p != hand.end(); ++p)
+        {
+            pips_v[i++] = (p->get_pips()).get_pips();
+        }
+        sort(pips_v, pips_v + 5); // feed the range for the iterator
+        if (pips_v[0] != 1)
+        { // not ACE
+            return (pips_v[0] == pips_v[1] - 1 && pips_v[1] == pips_v[2] - 1) && (pips_v[2] == pips_v[3] - 1 && pips_v[3] == pips_v[4] - 1);
+        }
+        else
+        {
+            return (pips_v[0] == pips_v[1] - 1 && pips_v[1] == pips_v[2] - 1) && (pips_v[2] == pips_v[3] - 1 && pips_v[3] == pips_v[4] - 1) || (pips_v[1] == 10) && (pips_v[2] == 11) && (pips_v[3] == 12) && (pips_v[4] == 13);
+        }
+    }
+
+    bool is_straight_flush(vector<card> &hand)
+    {
+        return is_flush(hand) && is_straight(hand);
+    }
+
+    int main()
+    {
+        vector<card> deck(52);
+        srand(time(0));
+        init_deck(deck);
+        int num_shuffles;
+        int flush_count = 0;
+        int str_count = 0;
+        int str_flush_count = 0;
+        cout << "How many shuffles? ";
+        cin >> num_shuffles;
+        for (int loop = 0; loop < num_shuffles; ++loop)
+        {
+            random_shuffle(deck.begin(), deck.end()); // STL algorithm again!
+            vector<card> hand(5);
+            int i = 0;
+            for (auto p = deck.begin(); i < 5; ++p)
+            {
+                hand[i++] = *p;
+            }
+            if (is_flush(hand))
+            {
+                flush_count++;
+            }
+            if (is_straight(hand))
+            {
+                str_count++;
+            }
+            if (is_straight_flush(hand))
+            {
+                str_flush_count++;
+            }
+        }
+        cout << "Flushes: " << flush_count << " out of " << num_shuffles << endl;
+        cout << "Straights: " << str_count << " out of " << num_shuffles << endl;
+        cout << "Straight Flushes: " << str_flush_count << " out of " << num_shuffles << endl;
+
+        return 0;
+    }
+}
+namespace FinalProject
+{
+    class Matrix
+    {
+    private:
+        int m[2][2];
+
+    public:
+        Matrix() = default;
+        Matrix(int a, int b, int c, int d)
+        {
+            m[0][0] = a;
+            m[0][1] = b;
+            m[1][0] = c;
+            m[1][1] = d;
+        }
+        friend Matrix operator*(int t, const Matrix &A)
+        {
+            Matrix result;
+            result.m[0][0] = t * A.m[0][0];
+            result.m[0][1] = t * A.m[0][1];
+            result.m[1][0] = t * A.m[1][0];
+            result.m[1][1] = t * A.m[1][1];
+            return result;
+        }
+        Matrix operator-() const
+        {
+            Matrix result;
+            result.m[0][0] = -this->m[0][0];
+            result.m[0][1] = -this->m[0][1];
+            result.m[1][0] = -this->m[1][0];
+            result.m[1][1] = -this->m[1][1];
+            return result;
+        }
+        friend ostream &operator<<(ostream &os, const Matrix &A)
+        {
+            os << "[" << A.m[0][0] << ", " << A.m[0][1] << "]\n"
+               << "[" << A.m[1][0] << ", " << A.m[1][1] << "]\n";
+            return os;
+        }
+        Matrix operator+(const Matrix &rhs)
+        {
+            Matrix result;
+            result.m[0][0] = this->m[0][0] + rhs.m[0][0];
+            result.m[0][1] = this->m[0][1] + rhs.m[0][1];
+            result.m[1][0] = this->m[1][0] + rhs.m[1][0];
+            result.m[1][1] = this->m[1][1] + rhs.m[1][1];
+            return result;
+        }
+        Matrix operator*(const Matrix &rhs)
+        {
+            Matrix result;
+            result.m[0][0] = this->m[0][0] * rhs.m[0][0] + this->m[0][1] * rhs.m[1][0];
+            result.m[0][1] = this->m[0][0] * rhs.m[0][1] + this->m[0][1] * rhs.m[1][1];
+            result.m[1][0] = this->m[1][0] * rhs.m[0][0] + this->m[1][1] * rhs.m[1][0];
+            result.m[1][1] = this->m[1][0] * rhs.m[0][1] + this->m[1][1] * rhs.m[1][1];
+            return result;
+        }
+    };
+} // namespace FinalProject
+
+// std::cin.ignore(1);  // 吸收輸入緩衝區中剩下的 '\n'（換行符）
+// cin.getline(stu_name, 50);
 #endif

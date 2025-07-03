@@ -15,6 +15,17 @@ public:
         return msg;
     }
 };
+class a : public std::exception
+{
+private:
+    char x;
+
+public:
+    virtual char *what() const noexcept override
+    {
+        return "";
+    }
+};
 class Date
 {
 private:
@@ -30,7 +41,6 @@ public:
     {
         if (y < 1900 || y > 2100)
             throw InvalidDate("[Out of range]Year must be between 1900 and 2100");
-
         if (m < 1 || m > 12)
             throw InvalidDate("Invalid month");
 
@@ -42,7 +52,7 @@ public:
 
         if (d < 1 || d > daysInMonth[m])
             throw InvalidDate("Invalid day for the given month/year");
-
+        throw a();
         day = d;
         month = m;
         year = y;
@@ -70,6 +80,11 @@ int main()
     catch (const std::exception &e)
     {
         cout << "Other error: " << e.what() << endl;
+    }
+    catch (const a &e)
+    {
+
+        cout << "eeeeee error: " << e.what() << endl;
     }
     return 0;
 }
