@@ -3,8 +3,6 @@ import mplfinance as mpf
 import yfinance as yf
 import pandas as pd
 import matplotlib.pyplot as plt
-
-
 def get_stock_info(stock_code):
     url = f"https://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=tse_{stock_code}"
     response = requests.get(url)
