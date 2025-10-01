@@ -54,6 +54,8 @@
         "unordered_set": "cpp",
         "forward_list": "cpp",
         "valarray": "cpp",
-        "map": "cpp"
+        "map": "cpp",
+        "system_error": "c",
+        "random": "c"
     }
 }
