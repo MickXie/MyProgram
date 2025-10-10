@@ -1,0 +1,35 @@
+.ss {
+  display: flex;
+}
+.gg {
+  background-color: red;
+  flex: none;
+  width: 200px;
+}
+.ff {
+  background-color: blue;
+  flex: auto;
+  display: flex;
+  justify-content: end;
+}
+.item {
+  background-color: white;
+  flex: none;
+  width: 100px;
+  margin-right: 10px;
+  text-align: center;
+}
+.welcome {
+  background-color: purple;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.text {
+  width: 300px;
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+}

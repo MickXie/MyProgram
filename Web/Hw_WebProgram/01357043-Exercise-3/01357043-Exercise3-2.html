@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Drop-Down Menu</title>
+    <style>
+        body {
+            font-family: Perpetua;
+        }
+        h1 {
+            color: RoyalBlue;
+            text-align: center;
+        }
+        nav {
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            width: calc(100% / 6); 
+            box-sizing: border-box;
+            background-color: RoyalBlue;
+            float: left;
+            overflow:auto ;
+        }
+        nav ul {
+            display: none;
+            list-style: none;
+            z-index: 1000;
+        }
+        nav:hover ul {
+            display: block;
+        }
+        nav ul li {
+            border-top: 2px solid RoyalBlue;
+            
+            width: calc(100% / 6);
+            color: rgb(255, 255, 255);
+            box-sizing: border-box;
+        }
+        nav ul li:hover {
+            background-color: PowderBlue;
+            
+        }
+        nav a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            padding: 5px;
+        }
+        iframe {
+            width: 100%;
+            height: 550px;
+            border: none;
+            clear: both;
+        }
+
+        @media screen and (max-width: 600px) {
+            nav {
+        width: 100%;
+        float: none;
+    }
+    nav ul {
+        position: relative;
+        width: 100%;
+    }
+    nav ul li {
+        width: 100%;
+    }
+    div {
+        width: 100%;
+    }
+        }
+    </style>
+</head>
+<body>
+    <h1>Web Intelligence</h1>
+
+    <nav>JavaScript
+        <ul>
+            <li><a href="https://www.w3schools.com/js/default.asp" target="_blank">W3Schools</a></li>
+            <li><a href="https://developer.mozilla.org/zh-TW/docs/Web/JavaScript" target="_blank">MDN</a></li>
+            <li><a href="https://www.json.org/json-en.html" target="_blank">JSON</a></li>
+        </ul>
+    </nav>
+
+    <nav>Client-side Framework
+        <ul>
+            <li><a href="https://react.dev/" target="_blank">React</a></li>
+            <li><a href="https://vuejs.org/" target="_blank">Vue.js</a></li>
+            <li><a href="https://angular.tw/" target="_blank">Angular</a></li>
+        </ul>
+    </nav>
+
+    <nav>Node.js
+        <ul>
+            <li><a href="https://www.w3schools.com/nodejs/" target="_blank">Node.js Tutorial</a></li>
+        </ul>
+    </nav>
+
+    <nav>PHP
+        <ul>
+            <li><a href="https://www.php.net/manual/en/tutorial.php" target="_blank">PHP Tutorial</a></li>
+        </ul>
+    </nav>
+
+    <nav>Python FastAPI
+        <ul>
+            <li><a href="https://fastapi.tiangolo.com/tutorial/" target="_blank">FastAPI User Guide</a></li>
+        </ul>
+    </nav>
+
+    <nav>Spring Boot
+        <ul>
+            <li><a href="https://spring.io/guides/gs/spring-boot" target="_blank">Spring Boot Tutorial</a></li>
+        </ul>
+    </nav>
+
+    <iframe src="01357031-Exercise3-1.html"></iframe>
+</body>
+</html>
+
+
+<!--
+**************************************************************************
+* (C) Copyright 1992-2012 by Deitel & Associates, Inc. and               *
+* Pearson Education, Inc. All Rights Reserved.                           *
+*                                                                        *
+* DISCLAIMER: The authors and publisher of this book have used their     *
+* best efforts in preparing the book. These efforts include the          *
+* development, research, and testing of the theories and programs        *
+* to determine their effectiveness. The authors and publisher make       *
+* no warranty of any kind, expressed or implied, with regard to these    *
+* programs or to the documentation contained in these books. The authors *
+* and publisher shall not be liable in any event for incidental or       *
+* consequential damages in connection with, or arising out of, the       *
+* furnishing, performance, or use of these programs.                     *
+**************************************************************************
+-->

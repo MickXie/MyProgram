@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="/CSS/set3.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h3>Document</h3>
+    <span
+      class="btn"
+      onmouseover="over(this);"
+      onmouseout="out(this);"
+      onmousedown="down(this);"
+      onmouseup="up(this);"
+      >點</span
+    >
+    <span
+      class="btn"
+      onmouseover="over(this);"
+      onmouseout="out(this);"
+      onmousedown="down(this);"
+      onmouseup="up(this);"
+      >點wo
+    </span>
+    <script>
+      let over = function (elem) {
+        elem.style.backgroundColor = "#ddcccc";
+      };
+      let out = function (elem) {
+        elem.style.backgroundColor = "aqua";
+      };
+      let down = function (elem) {
+        elem.style.fontWeight = "bold";
+      };
+      let up = function (elem) {
+        elem.style.fontWeight = "normal";
+      };
+    </script>
+  </body>
+</html>

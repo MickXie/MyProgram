@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gGGGg</title>
+    <style>
+      .gg {
+        font-size: 30px;
+        text-decoration: line-through;
+        background-color: white;
+      }
+      .ss {
+        background-color: yellow;
+        font-size: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="gg" onclick="change();">這是一個前往google的連結</div>
+    <button onclick="change2();" class="gsg">Change color</button>
+    <button onclick="change3();" class="gsgs" style="display: none">
+      Change back color
+    </button>
+    <script>
+      let gs = document.querySelector(".gg");
+      let gsg = document.querySelector(".gsg");
+      let gsgs = document.querySelector(".gsgs");
+      let change = function () {
+        window.location.href = "https://www.google.com/";
+      };
+      let change2 = function () {
+        gs.innerHTML = "yellow";
+        gs.className = "ss";
+        gs.style.color = "red";
+        gsgs.style.display = "block";
+        gsg.style.display = "none";
+      };
+      let change3 = function () {
+        gsg.style.display = "block";
+        gsgs.style.display = "none";
+        gs.innerHTML = "這是一個前往google的連結";
+        gs.className = "gg";
+        gs.style.color = "black";
+      };
+    </script>
+  </body>
+</html>

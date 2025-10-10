@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AJAX</title>
+  </head>
+  <body>
+    <h3>AJAX 網路服務</h3>
+    <button onclick="getdata();">取得連線資料</button>
+    <div id="result"></div>
+    <script>
+      let getdata = function () {
+        fetch(
+          "https://cwpeng.github.io/live-records-samples/data/products.json"
+        )
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (data) {
+            let result = document.querySelector("#result");
+            result.innerHTML = "";
+            for (let i = 0; i < data.length; i++) {
+              let product = data[i];
+              console.log(product);
+              result.innerHTML +=
+                "<div>" +
+                product.name +
+                "," +
+                product.price +
+                "," +
+                product.description +
+                "</div>";
+            }
+          });
+      };
+    </script>
+  </body>
+</html>
