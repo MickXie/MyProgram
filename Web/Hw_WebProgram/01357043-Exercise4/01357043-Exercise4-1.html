@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome Message</title>
+  <style>
+    body {
+      font-family: Helvetica, sans-serif;
+    }
+    .name {
+      color: firebrick;
+      font-weight: bold;
+    }
+    .age {
+      color: navy;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div id="output"></div>
+  <script>
+    const nameInput = prompt("Please input your name:");
+    const birthYear = prompt("Please input your birth year:");
+    const currentYear = new Date().getFullYear();
+    const age = currentYear - parseInt(birthYear, 10);
+    if (isNaN(age) || age <= 0) {
+      alert("Your input is incorrect!");
+      console.log("Your input is incorrect!");
+    } else {
+      const displayName = (age === 1) ? "Kid" : nameInput;
+      const ageText = (age === 1) ? "one" : `${age}`;
+      document.getElementById("output").innerHTML = `
+        <h1>Hello, <span class="name">${displayName}</span> !</h1>
+        <h2>You are <span class="age">${ageText}</span> year${age === 1 ? "" : "s"} old!</h2>
+      `;
+      console.log(`Hello, ${displayName}!`);
+      console.log(`You are ${ageText} year${age === 1 ? "" : "s"} old!`);
+    }
+  </script>
+</body>
+</html>
