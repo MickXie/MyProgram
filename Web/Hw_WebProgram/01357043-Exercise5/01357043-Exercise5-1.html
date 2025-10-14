@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Simple Calculator</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: "Courier New", Courier, monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f5f5f5;
+    }
+
+    .container {
+      text-align: center;
+    }
+
+    .calculator {
+      display: flex;
+      flex-direction: column;
+      width: 200px;
+      margin: 0 auto;
+    }
+
+    input, select, button {
+      margin-bottom: 10px;
+      padding: 5px;
+    }
+
+    button {
+      background: #4CAF50;
+      color: #fff;
+      border: 0;
+      cursor: pointer;
+      font-size: 120%;
+      width: 200px;
+    }
+
+    button:hover { opacity: .85; }
+
+    .result {
+      font-size: 120%;
+      padding: 10px;
+      border: 3px solid #ddd;
+      width: 200px;
+      text-align: center;
+      box-sizing: border-box;
+      background-color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h3>Simple Calculator</h3>
+    <div class="calculator">
+      <input id="n1" type="text" placeholder="Input first number" />
+      <select id="op" aria-label="operator">
+        <option value="+">+</option>
+        <option value="-">-</option>
+        <option value="*">*</option>
+        <option value="/">/</option>
+      </select>
+      <input id="n2" type="text" placeholder="Input second number" />
+      <button id="go">Calculate</button>
+    </div>
+    <div id="result" class="result">Results</div>
+  </div>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    const out = $('result');
+
+    function calculate() {
+      const a = parseFloat($('n1').value.trim());
+      const b = parseFloat($('n2').value.trim());
+      const op = $('op').value;
+
+      if (!Number.isFinite(a) || !Number.isFinite(b)) {
+        out.textContent = 'Please enter valid numbers';
+        return;
+      }
+      if (op === '/' && b === 0) {
+        out.textContent = 'Dividing by 0 is illegal';
+        return;
+      }
+
+      let r;
+      switch (op) {
+        case '+': r = a + b; break;
+        case '-': r = a - b; break;
+        case '*': r = a * b; break;
+        case '/': r = a / b; break;
+      }
+      out.textContent = r;
+    }
+
+    $('go').addEventListener('click', calculate);
+    ['n1','n2'].forEach(id => $(id).addEventListener('keydown', e => {
+      if (e.key === 'Enter') calculate();
+    }));
+  </script>
+</body>
+</html>

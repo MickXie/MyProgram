@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Pokémon Grid</title>
+  <style>
+    body {
+      font-family: Helvetica, Arial, sans-serif;
+      padding: 20px;
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: auto auto auto auto auto auto auto auto;
+      gap: 12px;
+      align-items: end;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    #display {
+      margin-top: 16px;
+      line-height: 0;
+    }
+
+    .btn {
+      padding: 8px 14px;
+      border: 1px solid #ddd;
+      cursor: pointer;
+      border-radius: 8px;
+      background: #fafafa;
+    }
+
+    .btn:hover {
+      background: #f0f0f0;
+    }
+
+    hr {
+      margin: 16px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Pokémon Grid</h1>
+
+  <form id="pokemonForm" onsubmit="return false;">
+    <div>
+      <label for="pokemon">Pokemon (1~5):</label><br />
+      <select id="pokemon">
+        <option value="1">1-pikachu</option>
+        <option value="2">2-bulbasaur</option>
+        <option value="3">3-charmander</option>
+        <option value="4">4-squirtle</option>
+        <option value="5">5-random</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="width">Side length (1~10):</label>(預設5)<br />
+      <input id="width" type="number" value="5" min="1" max="10" />
+    </div>
+
+    <div>
+      <label for="size">Image size (50~150):</label>(預設100)<br />
+      <input id="size" type="number" value="100" min="50" max="150" />
+    </div>
+
+    <button id="drawBtn" class="btn" type="button">Draw</button>
+    <button id="clearBtn" class="btn" type="button">Clear</button>
+  </form>
+
+  <hr />
+
+  <div id="display"></div>
+
+  <script>
+    const errMsg1 = "You input an invalid side length! It will be reset to 5.";
+    const errMsg2 = "Image size should be between 50 and 150! It will be reset to 100.";
+
+    const pokemons = [
+      "pikachu.png",
+      "bulbasaur.png",
+      "charmander.png",
+      "squirtle.png"
+    ];
+
+    const drawBtn = document.getElementById("drawBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const display = document.getElementById("display");
+
+    drawBtn.addEventListener("click", () => {
+      let pokemonVal = parseInt(document.getElementById("pokemon").value);
+      let sideLen = parseInt(document.getElementById("width").value);
+      let imgSize = parseInt(document.getElementById("size").value);
+
+     
+      if (isNaN(sideLen) || sideLen < 1 || sideLen > 10) {
+        alert(errMsg1);
+        sideLen = 5;
+        document.getElementById("width").value = 5;
+      }
+
+     
+      if (isNaN(imgSize) || imgSize < 50 || imgSize > 150) {
+        alert(errMsg2);
+        imgSize = 100;
+        document.getElementById("size").value = 100;
+      }
+
+      display.innerHTML = "";
+
+      for (let i = 0; i < sideLen; i++) {
+        for (let j = 0; j < sideLen; j++) {
+          const img = document.createElement("img");
+          let src = "";
+
+          if (pokemonVal === 5) {
+            const randIndex = Math.floor(Math.random() * pokemons.length);
+            src = pokemons[randIndex];
+          } else {
+            src = pokemons[pokemonVal - 1];
+          }
+
+          img.src = src;
+          img.width = imgSize;
+          img.height = imgSize;
+          display.appendChild(img);
+        }
+        display.appendChild(document.createElement("br"));
+      }
+    });
+
+    clearBtn.addEventListener("click", () => {
+      display.innerHTML = "";
+    });
+  </script>
+</body>
+</html>
