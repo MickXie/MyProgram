@@ -4,12 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+      @media (prefers-color-scheme: light) {
+  body {
+    background-color: white;
+    color: black;
+  }
+}
+    </style>
 </head>
 <body>
     <form>
       <label>Email:</label>
-      <input type="email" placeholder="example@ntou.edu.tw" required>
+      <input type="email" placeholder="example@ntou.edu.tw" autocomplete="on" required>
+      <label>密碼:</label>
+      <input type="password"  autocomplete="on" required>
+      <label>手機號碼:</label>
+      <input type="tel" pattern="^09\d{8}$" autocomplete="on">
       <input type="submit">
+      <label>喜歡的水果：</label>
+      <input list="fruits" name="fruit">
+      <datalist id="fruits">
+        <option value="Apple">
+        <option value="Banana">
+        <option value="Cherry">
+        <option value="Mango">
+      </datalist>
     </form>
+    <script>
+      const add = (x, y) => x + y;
+      console.log(add(3, 4)); // 7
+
+    </script>
 </body>
 </html>
