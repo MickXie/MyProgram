@@ -5,6 +5,44 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <style>
+    form {
+
+      background-color: lightyellow;
+      border: 2px solid orange;
+      padding: 20px;
+      /* 內容離邊框 20px */
+      margin: 40px;
+      /* 整個盒子與外部距離 40px */
+
+
+    }
+
+    .container {
+      display: flex;
+      justify-content: space-around;
+      /* 平均分配空間 */
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: auto auto auto;
+      /* 三欄 */
+      gap: 20px;
+      /* 欄間距 */
+    }
+
+    div {
+      width: 100px;
+      height: 100px;
+      background: coral;
+      transition: transform 0.5s;
+    }
+
+    div:hover {
+      transform: rotate(45deg) scale(1.2);
+    }
+  </style>
 </head>
 
 <body>
@@ -12,7 +50,20 @@
     <label>Email:</label>
     <input type="email" placeholder="example@ntou.edu.tw" required>
     <input type="submit">
+
+
   </form>
+  <div class="container">
+    <div>盒子1</div>
+    <div>盒子2</div>
+    <div>盒子3</div>
+  </div>
+  <div class="grid">
+    <div>A</div>
+    <div>B</div>
+    <div>C</div>
+  </div>
+
 </body>
 
 </html>
