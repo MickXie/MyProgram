@@ -54,6 +54,22 @@
 - **Bracket Pair Colorizer**：括號配色
 - **Auto Rename Tag**：同步修改 HTML/XML 標籤
 
+#### 前端套件組
+- **Auto close tag**
+- **Auto import**
+- **shift alt f 設定 pretter**
+- **HTML Snippets**
+- **Live Server**
+- **indent-rainbow**
+- **ESLint**
+- **Path Intellisense**
+- **Html CSS Support**
+- **Image preview**
+- **Smart CSS Autocomplete**
+- **HTML to CSS Autocompletion**
+- **JavaScript (ES6) code snippets**
+- https://github.com/logeshpaul/Frontend-Cheat-Sheets.git
+ 
 ---
 
 ## C++/Python 實作與練習
