@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <title>Dice Game</title>
+    <style>
+      li {
+        display: inline;
+        margin-right: 10px;
+      }
+
+      ol {
+        margin-left: 0;
+        padding-left: 0;
+      }
+
+      img.dice {
+        width: 100px;
+        height: 100px;
+      }
+
+      img.congrats {
+        width: 440px;
+      }
+
+      #msg {
+        font-family: Helvetica, "Microsoft YaHei", "LiHei Pro", "TW-Kai";
+        font-size: 120%;
+        color: navy;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <form action="#">
+      <input id="rollButton" type="button" value="Roll Dice" />
+      <input id="cheatButton" type="button" value="Shortcut" />
+      <input id="cheatButton2" type="button" value="Shortcut2" />
+    </form>
+
+    <ol>
+      <li><img id="die1" class="dice" src="blank.jpg" alt="blank image" /></li>
+      <li><img id="die2" class="dice" src="blank.jpg" alt="blank image" /></li>
+      <li><img id="die3" class="dice" src="blank.jpg" alt="blank image" /></li>
+      <li><img id="die4" class="dice" src="blank.jpg" alt="blank image" /></li>
+    </ol>
+
+    <div id="msg"></div>
+
+    <script>
+      const diceImgs = [
+        "die1.jpg",
+        "die2.jpg",
+        "die3.jpg",
+        "die4.jpg",
+        "die5.jpg",
+        "die6.jpg",
+      ];
+      const msgDiv = document.getElementById("msg");
+      const dice = [
+        document.getElementById("die1"),
+        document.getElementById("die2"),
+        document.getElementById("die3"),
+        document.getElementById("die4"),
+      ];
+
+      function rollDice() {
+        const values = [];
+        for (let i = 0; i < 4; i++) {
+          const val = Math.floor(Math.random() * 6) + 1;
+          values.push(val);
+          dice[i].src = diceImgs[val - 1];
+        }
+        showResult(values);
+      }
+
+      function cheatSame() {
+        const val = Math.floor(Math.random() * 6) + 1;
+        const values = [val, val, val, val];
+        updateDice(values);
+        msgDiv.innerHTML = `<p>Congratulations! Your roll is "一色"!</p><img src="congrats.png" class="congrats">`;
+      }
+
+      function cheatEighteen() {
+        const values = [6, 6, 6, 6]; // 十八
+        updateDice(values);
+        msgDiv.innerHTML = `<p>Congratulations! Your roll is "十八"!</p><img src="congrats.png" class="congrats"><p>Your score is 12!</p>`;
+      }
+
+      function updateDice(values) {
+        for (let i = 0; i < 4; i++) {
+          dice[i].src = diceImgs[values[i] - 1];
+        }
+      }
+
+      function showResult(values) {
+        const counts = {};
+        values.forEach((v) => (counts[v] = (counts[v] || 0) + 1));
+        const unique = Object.keys(counts).length;
+
+        if (unique === 1) {
+          msgDiv.innerHTML = `<p>Congratulations! Your roll is "一色"!</p><img src="congrats.png" class="congrats">`;
+        } else if (unique === 4) {
+          msgDiv.innerHTML = `<p>Oops! Your roll is "無面"!</p><img src="oops.jpg" class="congrats">`;
+        } else if (Object.values(counts).includes(3)) {
+          msgDiv.innerHTML = `<p>No decision, please re-roll the dice!</p>`;
+        } else if (unique === 3) {
+          msgDiv.innerHTML = `<p>No decision, please re-roll the dice!</p>`;
+        } else if (unique === 2) {
+          // 判斷得分規則（兩顆同點）
+          let sameVal = null;
+          for (let v in counts) if (counts[v] === 2) sameVal = v;
+          const others = values.filter((v) => v != sameVal);
+          const score = others[0] + others[1];
+          if (score === 12) {
+            msgDiv.innerHTML = `<p>Congratulations! Your roll is "十八"!</p><img src="congrats.png" class="congrats"><p>Your score is ${score}!</p>`;
+          } else {
+            msgDiv.innerHTML = `<p>Your score is ${score}!</p>`;
+          }
+        } else {
+          msgDiv.innerHTML = `<p>No decision, please re-roll the dice!</p>`;
+        }
+      }
+
+      document.getElementById("rollButton").onclick = rollDice;
+      document.getElementById("cheatButton").onclick = cheatSame;
+      document.getElementById("cheatButton2").onclick = cheatEighteen;
+    </script>
+  </body>
+</html>

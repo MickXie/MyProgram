@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <title>出包理由產生器</title>
+    <style>
+      @import url("https://fonts.googleapis.com/earlyaccess/cwtexkai.css");
+      body {
+        font-family: "cwTeXKai", Perpetua, serif;
+        background-color: #fef9ff;
+        text-align: center;
+        padding-top: 50px;
+      }
+      .title {
+        color: #2c3033;
+      }
+      .reason1 {
+        color: #7392b7;
+      }
+      .reason2 {
+        color: #ad343e;
+        font-size: 150%;
+      }
+      img {
+        height: 300px;
+        cursor: pointer;
+        margin-top: 20px;
+      }
+    </style>
+    <script>
+      const adjAry = [
+        "客戶那邊的",
+        "我們的",
+        "負責需求的",
+        "負責這個部分的",
+        "直到上線前一天",
+        "(雙手一攤)",
+      ];
+      const nounAry = [
+        "專案經理",
+        "主管",
+        "工程師",
+        "設計師",
+        "外包",
+        "User",
+        "聯絡窗口",
+      ];
+      const verbAry = [
+        "當初沒有講清楚",
+        "一直換",
+        "說他肚子不舒服",
+        "擺爛不想做了",
+        "突然開始放長假",
+        "去生小孩了",
+        "離職了",
+        "都沒甚麼sense",
+        "都沒有跟我講",
+        "以為這些不用做",
+        "一直在狀況外",
+        "做事拖拖拉拉",
+        "還搞不清楚狀況",
+        "Quality有問題",
+        "東西一直改",
+        "在整我",
+        "突然就沒來了",
+      ];
+      const imgAry = [
+        "Cat.jpg",
+        "Boy.jpg",
+        "Ohtani.jpg",
+        "Harry.jpg",
+        "Jacky.jpg",
+      ];
+
+      function generate() {
+        const adj = adjAry[Math.floor(Math.random() * adjAry.length)];
+        const noun = nounAry[Math.floor(Math.random() * nounAry.length)];
+        const verb = verbAry[Math.floor(Math.random() * verbAry.length)];
+        const img = imgAry[Math.floor(Math.random() * imgAry.length)];
+
+        document.getElementById("display").innerHTML = `
+                <h1 class="reason1">${adj}${noun}</h1>
+                <h1 class="reason2">${verb}！</h1>
+                <img src="${img}" alt="出包理由圖" onclick="generate()">
+            `;
+      }
+
+      window.onload = generate;
+    </script>
+  </head>
+  <body>
+    <div>
+      <h1 class="title">專案失敗了，是因為...</h1>
+      <div id="display"></div>
+    </div>
+  </body>
+</html>
