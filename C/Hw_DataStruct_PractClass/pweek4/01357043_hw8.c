@@ -1,99 +1,84 @@
 #include <stdio.h>
+#include <stdbool.h>
 
-#define SIZE 9
+#define UNASSIGNED 0
+#define N 9
 
-int board[SIZE][SIZE];
+int grid[N][N] = {
+    {8, 0, 7, 1, 5, 4, 0, 9, 6},
+    {9, 0, 5, 0, 2, 7, 1, 0, 8},
+    {0, 4, 1, 0, 8, 0, 7, 0, 2},
+    {5, 9, 0, 4, 0, 8, 2, 7, 1},
+    {4, 0, 2, 5, 1, 3, 0, 8, 9},
+    {6, 1, 0, 0, 7, 2, 0, 3, 5},
+    {0, 8, 6, 2, 3, 5, 0, 1, 4},
+    {1, 5, 4, 7, 9, 6, 8, 0, 3},
+    {2, 3, 9, 8, 4, 1, 5, 6, 0}};
 
-int isValid(int row, int col, int num)
+bool isSafe(int row, int col, int num)
 {
+    for (int x = 0; x < N; x++)
+        if (grid[row][x] == num || grid[x][col] == num)
+            return false;
 
-    for (int i = 0; i < SIZE; i++)
-    {
-        if (board[row][i] == num)
-            return 0;
-    }
-
-    for (int i = 0; i < SIZE; i++)
-    {
-        if (board[i][col] == num)
-            return 0;
-    }
-
-    int startRow = row / 3 * 3;
-    int startCol = col / 3 * 3;
+    int boxStartRow = row - row % 3;
+    int boxStartCol = col - col % 3;
     for (int i = 0; i < 3; i++)
-    {
         for (int j = 0; j < 3; j++)
-        {
-            if (board[startRow + i][startCol + j] == num)
-                return 0;
-        }
-    }
-    return 1;
+            if (grid[i + boxStartRow][j + boxStartCol] == num)
+                return false;
+
+    return true;
 }
 
-int solveSudoku()
+bool solveSudoku()
 {
-    for (int row = 0; row < SIZE; row++)
-    {
-        for (int col = 0; col < SIZE; col++)
-        {
-            if (board[row][col] == 0)
+    int row = -1, col = -1;
+    bool empty = false;
+
+    for (int i = 0; i < N; i++)
+        for (int j = 0; j < N; j++)
+            if (grid[i][j] == UNASSIGNED)
             {
-                for (int num = 1; num <= 9; num++)
-                {
-                    if (isValid(row, col, num))
-                    {
-                        board[row][col] = num;
-                        if (solveSudoku())
-                            return 1;
-                        board[row][col] = 0;
-                    }
-                }
-                return 0;
+                row = i;
+                col = j;
+                empty = true;
+                break;
             }
+
+    if (!empty)
+        return true;
+
+    for (int num = 1; num <= 9; num++)
+    {
+        if (isSafe(row, col, num))
+        {
+            grid[row][col] = num;
+
+            if (solveSudoku())
+                return true;
+
+            grid[row][col] = UNASSIGNED;
         }
     }
-    return 1;
+    return false;
 }
 
-void printBoard()
+void printGrid()
 {
-    for (int i = 0; i < SIZE; i++)
+    for (int i = 0; i < N; i++)
     {
-        for (int j = 0; j < SIZE; j++)
-        {
-            printf("%d ", board[i][j]);
-            if ((j + 1) % 3 == 0)
-                printf("|");
-        }
+        for (int j = 0; j < N; j++)
+            printf("%d ", grid[i][j]);
         printf("\n");
-        if ((i + 1) % 3 == 0)
-        {
-            for (int k = 0; k < 9; k++)
-                printf("- ");
-            printf("\n");
-        }
     }
 }
 
 int main()
 {
-    for (int i = 0; i < SIZE; i++)
-    {
-        for (int j = 0; j < SIZE; j++)
-        {
-            scanf("%d", &board[i][j]);
-        }
-    }
-    printf("\n");
     if (solveSudoku())
-    {
-        printBoard();
-    }
+        printGrid();
     else
-    {
-        printf("No solution.\n");
-    }
+        printf("No solution exists!");
     return 0;
 }

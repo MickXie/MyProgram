@@ -21,7 +21,6 @@ void buildFailure(char *pattern, int fail[])
         fail[i] = j;
     }
 }
-
 int KMP(char *text, char *pattern)
 {
     int n = strlen(text);

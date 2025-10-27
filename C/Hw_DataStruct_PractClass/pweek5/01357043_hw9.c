@@ -27,6 +27,7 @@ int main()
             if (count == N)
             {
                 sprintf(output[out_count++], "FULL");
+                // 重要
             }
             else
             {

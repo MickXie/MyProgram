@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>我的軟體開發技術書籍收藏</title>
+
+    <style>
+      /* 字型：使用 @import 載入 cwTeXFangSong（仿宋體） */
+      @import url("https://fonts.googleapis.com/earlyaccess/cwtexfangsong.css");
+
+      /* ===== 基本樣式 ===== */
+      body {
+        font-family: "cwTeXFangSong", serif;
+        margin: 0;
+        padding: 16px;
+        background: #fafafa;
+      }
+
+      h1 {
+        color: darkblue;
+        font-size: 32px;
+        text-align: center;
+        margin: 8px 0 12px;
+      }
+
+      p {
+        color: #030303;
+        background-color: #d4f1f9;
+        padding: 10px;
+        border-radius: 5px;
+        margin: 0 0 12px 0;
+      }
+
+      /* ===== 你的既有樣式（保留） ===== */
+      .book {
+      }
+      .book img {
+      }
+      .book-title {
+      }
+      .book-description {
+      }
+      .book-url a {
+      }
+      input {
+        width: 50%;
+        padding: 10px;
+        margin-bottom: 5px;
+        float: left;
+        box-sizing: border-box;
+      }
+      input.longInput {
+        width: 100%;
+      }
+
+      button {
+        width: 33%;
+        position: relative;
+        left: 33%;
+        padding: 10px;
+        border-radius: 10px;
+        border: 0;
+        background: orange;
+        font-size: 14px;
+        cursor: pointer;
+        margin-top: 6px;
+      }
+
+      /* ===== 表單補充 ===== */
+      .form-wrap {
+        margin: 10px 0 6px;
+      }
+      .clearfix {
+        clear: both;
+      }
+      .hint {
+        font-size: 14px;
+        color: #666;
+        margin: 6px 0 0;
+      }
+      #msg {
+        margin: 6px 0 0;
+        font-size: 14px;
+        color: #b00020;
+        min-height: 1.2em;
+      }
+
+      hr {
+        margin: 12px 0 14px;
+      }
+
+      /* ===== 書籍清單布局 ===== */
+      #bookList {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      /* 顯示每本書：圖片在左、文字在右（寬螢幕）；小螢幕改垂直堆疊 */
+      .book {
+        background: #fff;
+        border: 1px solid #eee;
+        border-radius: 10px;
+        padding: 12px;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      }
+
+      .book img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 8px;
+        flex: 0 0 auto;
+      }
+
+      .book-content {
+        flex: 1 1 auto;
+      }
+
+      .book-title {
+        font-weight: bold;
+        color: orange; /* 書名：橘色粗體 */
+        margin-bottom: 6px;
+        font-size: 18px;
+        line-height: 1.25;
+        word-break: break-word;
+      }
+
+      .book-url a {
+        text-decoration: none; /* 去除底線 */
+        color: #0b57d0;
+      }
+
+      .book-description {
+        font-size: 14px; /* 小字體 */
+        color: gray; /* 灰色 */
+        margin-top: 6px;
+        line-height: 1.5;
+        word-break: break-word;
+      }
+
+      /* ===== RWD ===== */
+      @media (min-width: 600px) {
+        /* 最多兩本並排 */
+        #bookList {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        /* 文字靠左、圖片在左側（已為預設 flex row） */
+      }
+
+      @media (max-width: 599.98px) {
+        /* 小螢幕：每列一書、圖片置頂置中 */
+        .book {
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        }
+        .book img {
+          margin: 0 auto 6px;
+        }
+        .book-content {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>我的軟體開發技術書籍收藏</h1>
+    <p>主要收藏 Web programming 與 Software engineering 相關書籍</p>
+
+    <!-- 使用者輸入 -->
+    <div class="form-wrap">
+      <input id="titleInput" type="text" placeholder="書籍名稱（必填）" />
+      <input
+        id="urlInput"
+        type="url"
+        placeholder="書籍網址（例：https://example.com/book）"
+      />
+      <input
+        id="descInput"
+        class="longInput"
+        type="text"
+        placeholder="書籍描述（必填）"
+      />
+      <div class="clearfix"></div>
+      <button id="addButton" type="button">新增書籍</button>
+      <div id="msg"></div>
+      <div class="hint">
+        提示：名稱與描述為必填；網址未填將以「#」作為連結。
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- 書籍列表 -->
+    <div id="bookList">
+      <!-- 初始展示（以 JS 陣列渲染），此容器內容會被覆蓋 -->
+    </div>
+
+    <script>
+      // 預設資料：使用你原本的書卡 HTML 字串，並改為採用「圖片＋文字容器」結構
+      let bookArray = [
+        `<div class="book">
+        <img src="https://picsum.photos/150/150" alt="書籍封面">
+        <div class="book-content">
+          <div class="book-title">《JavaScript: The Good Parts》</div>
+          <div class="book-url"><a href="https://example.com/js-good-parts" target="_blank" rel="noopener">書籍連結</a></div>
+          <div class="book-description">由 Douglas Crockford 撰寫，是深入理解 JavaScript 精髓的經典書籍。</div>
+        </div>
+      </div>`,
+        `<div class="book">
+        <img src="https://picsum.photos/150/150" alt="書籍封面">
+        <div class="book-content">
+          <div class="book-title">《Clean Code》</div>
+          <div class="book-url"><a href="https://example.com/clean-code" target="_blank" rel="noopener">書籍連結</a></div>
+          <div class="book-description">Robert C. Martin 所著，介紹如何撰寫可維護且清晰的程式碼。</div>
+        </div>
+      </div>`,
+      ];
+
+      // 以 join() 將陣列內容渲染到頁面
+      const bookListEl = document.getElementById("bookList");
+      function renderBooks() {
+        bookListEl.innerHTML = bookArray.join("");
+      }
+      renderBooks();
+
+      // 綁定按鈕事件
+      document
+        .getElementById("addButton")
+        .addEventListener("click", addBook, false);
+
+      function addBook() {
+        const titleEl = document.getElementById("titleInput");
+        const urlEl = document.getElementById("urlInput");
+        const descEl = document.getElementById("descInput");
+        const msgEl = document.getElementById("msg");
+
+        const title = (titleEl.value || "").trim();
+        const url = (urlEl.value || "").trim();
+        const desc = (descEl.value || "").trim();
+
+        // 驗證：名稱與描述必填
+        if (!title || !desc) {
+          msgEl.textContent = "請輸入完整的書籍名稱與描述。";
+          return;
+        }
+        msgEl.textContent = "";
+
+        // 如果未填網址，使用 '#'
+        const href = url ? url : "#";
+
+        const cardHtml = `
+        <div class="book">
+          <img src="https://picsum.photos/150/150" alt="書籍封面">
+          <div class="book-content">
+            <div class="book-title">${escapeHtml(title)}</div>
+            <div class="book-url"><a href="${escapeAttr(
+              href
+            )}" target="_blank" rel="noopener">書籍連結</a></div>
+            <div class="book-description">${escapeHtml(desc)}</div>
+          </div>
+        </div>`.trim();
+
+        // 使用 push() 加到陣列，再用 join() 重渲染
+        bookArray.push(cardHtml);
+        renderBooks();
+
+        // 清空輸入
+        titleEl.value = "";
+        urlEl.value = "";
+        descEl.value = "";
+        titleEl.focus();
+      }
+
+      // 簡易跳脫，避免把使用者輸入當作 HTML 解讀
+      function escapeHtml(s) {
+        return s
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#39;");
+      }
+      function escapeAttr(s) {
+        // 供 href 等屬性使用
+        return escapeHtml(s);
+      }
+    </script>
+  </body>
+</html>
