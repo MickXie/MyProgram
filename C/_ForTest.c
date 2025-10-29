@@ -2,346 +2,258 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
-#define MAX_SIZE 101
-#define MAX 1000
-void SWAP(int *x, int *y)
+int sum(int n)
 {
-    int temp;
-    temp = *x;
-    *x = *y;
-    *y = temp;
-}
-void Select_Sort(int list[], int n)
-{
-    int i, j, min, temp;
-    for (i = 0; i < n; i++)
+    if (n == 0)
     {
-        min = i;
-        for (j = i + 1; j < n; j++)
-        {
-            if (list[j] < list[min])
-                min = j;
-        }
-        if (i != min)
-        {
-            SWAP(&list[i], &list[min]);
-        }
+        return 0;
+    }
+    else
+    {
+        return n + sum(n - 1);
     }
 }
-/* i 現在要放正確數字的位置（前面已排好）
-        min 在從 i 到 n -
-    1 找到的最小值的位置
-        list[i] 現在這格還沒確定是否最小
-            list[min] 搜尋後確定的真正最小數 void
-            bubble_Sort(int list[], int n)
-*/
-void Insertion_Sort(int list[], int n)
+void nineTimesNine(int n, int m)
 {
-    for (int i = 0; i < n; i++)
+    if (n > 9)
+        return;
+
+    printf("%d x %d = %2d\t", n, m, n * m);
+
+    if (m < 9)
     {
-        for (int j = i - 1; j >= 0 && list[j] > list[j + 1]; j--)
-        {
-            SWAP(&list[j], &list[j + 1]);
-        }
+        nineTimesNine(n, m + 1);
+    }
+    else
+    {
+        printf("\n");
+        nineTimesNine(n + 1, 1);
     }
 }
-/*
-外層：每次右邊加入一個新元素（index = i）
-內層：往左比較，把它放到前面已排序區的正確位置
-最小值會往左堆直到右邊到底
-*/
-void bubble_Sort(int list[], int n)
+int partition(int arr[], int left, int right)
 {
-    for (int i = 0; i < n - 1; i++)
+    int pivot = arr[left];
+    int i = left + 1;
+    int j = right;
+    while (1)
     {
-        for (int j = 0; j < n - i - 1; j++)
+        while (i <= right && arr[i] >= pivot)
+            i++;
+        while (j >= left && arr[j] < pivot)
+            j--;
+        if (i >= j)
+            break;
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+    int temp = arr[j];
+    arr[j] = arr[left];
+    arr[left] = temp;
+    return j;
+}
+void quickSort(int arr[], int left, int right)
+{
+    if (right > left)
+    {
+        int pivotIndex = partition(arr, left, right);
+        quickSort(arr, left, pivotIndex - 1);
+        quickSort(arr, pivotIndex + 1, right);
+    }
+}
+int is_palindrome(char *string)
+{
+    char stack[100];            // 可以捨棄
+    int total = strlen(string); // string要用strlen,j用不著,而且total所指的最後一個字是/0
+    strcpy(stack, string);
+    for (int i = 0; i < total / 2; i++)
+    {
+        if (!(stack[i] == string[total - 1 - i]))
+            return 0;
+    }
+    return 1;
+}
+void homework1()
+{
+    char ans[100][10];
+    char string[100]; // 要配置記憶體
+    int count = 0;
+    while (scanf("%s", string) != EOF)
+    {
+        int result = is_palindrome(string);  // 別硬轉
+        sprintf(ans[count++], "%d", result); // 這樣轉比較好
+    }
+    for (int i = 0; i < count; i++)
+        printf("%s\n", ans[i]);
+}
+void subset_recursive(int arr[], int n, int index, int current[], int cur_size)
+{
+    if (index == n)
+    {
+        if (cur_size == 0)
         {
-            if (list[j] > list[j + 1])
+            printf("Empty\n");
+        }
+        else
+        {
+            for (int i = 0; i < cur_size; i++)
             {
-                SWAP(&list[j], &list[j + 1]);
+                printf("%d ", current[i]);
+            }
+            printf("\n");
+        }
+    }
+    else
+    {
+        current[cur_size] = arr[index];
+        subset_recursive(arr, n, index + 1, current, cur_size + 1);
+        // 要這個index所指的元素了
+        subset_recursive(arr, n, index + 1, current, cur_size);
+        // 不要這個index所指的元素了
+    }
+}
+typedef struct
+{
+    int index;
+    int cur_size;
+} Frame;
+void subset_stack(int arr[], int n)
+{
+    Frame stack[100];
+    int sp = 0;
+    int current[100];
+    stack[sp++] = (Frame){0, 0}; //= {0, 0};C 不合法（只能在宣告stack適時初始化）
+    while (sp > 0)
+    {
+        Frame now = stack[--sp]; // 先減 1再用新值
+        if (now.index == n)
+        {
+            if (now.cur_size == 0)
+            {
+                printf("empty\n");
+            }
+            else
+            {
+                for (int i = 0; i < now.cur_size; i++)
+                {
+                    printf("%d ", current[i]);
+                }
+                printf("\n");
             }
         }
-    }
-}
-/*
-最大值往右堆,縮減右邊範圍,重覆到縮減至0
-*/
-void Binary_Search(int list[], int n, int target)
-{
-    int middle;
-    int left = 0;
-    int right = n - 1;
-    while (left <= right)
-    {
-        middle = (left + right) / 2;
-        if (list[middle] < target)
-        {
-            left = middle + 1;
-        }
-        else if (list[middle] == target)
-        {
-            printf("%d", middle);
-            return;
-        }
         else
-            right = middle - 1;
-    }
-    printf("not found\n");
-    return;
-}
-void Binary_Search_recursive(int list[], int left, int right, int target)
-{
-    if (left > right)
-        return -1;
-
-    int mid = (left + right) / 2;
-
-    if (list[mid] == target)
-        return mid;
-    if (list[mid] > target)
-        return bsearch_recursive(list, left, mid - 1, target);
-    return bsearch_recursive(list, mid + 1, right, target);
-}
-typedef struct
-{
-    char last_name;
-    int student_id;
-    float grade;
-    union
-    {
-        int kid;
-        int beard;
-    } u;
-    // UNION 只能存一種型態,像是多選一的資料庫,一次只能有一種資料生效
-    // ex:bread or kid 二選一
-    // 看裡面最大的型態來分配空間
-} student;
-// typedef <原型別> <別名>;
-// struct 名字{}是個結構行別,名字因為用typedef已不重要
-
-struct Node
-{
-    bool is_leaf;
-    union
-    {
-        struct
         {
-            struct Node *left;
-            struct Node *right;
-        } internal;
-        double data;
-    } info;
+            stack[sp++] = (Frame){now.index + 1, now.cur_size}; // 不要
+            current[now.cur_size] = arr[now.index];
+            stack[sp++] = (Frame){now.index + 1, now.cur_size + 1}; // 要
+            // 原本這樣會讓「不選的情況」先被處理（順序顛倒）由於 stack 是「後進先出 (LIFO)」。
+        }
+    }
+    // 分析遞迴 → Stack 模擬的思維流程
+    // 1 找出遞迴函式裡會變的參數（就是要記錄的狀態）
+    // 2 決定 base case 條件
+    // 3 決定每層要 push 幾個新 frame（幾個分支）
+    // 4 決定 push 順序（確保執行順序一致）
+    // 5 在 while 迴圈中不斷 pop / 處理 / push
+}
+#define Max 100
+typedef struct poly Poly;
+struct poly
+{
+    float coef;
+    int expon;
 };
-// 可以儲存下列任一的聯合資訊
-// 實現binary tree (only leaf nodes have data)
-void strInsert(char *s, char *t, int i)
+void Polynomial_Addition(Poly A[], Poly B[], Poly ans[])
 {
-    /* insert string t into string s at position i */
-    char string[MAX_SIZE], *temp = string;
-    if (i < 0 && i > strlen(s))
+    int a = A[0].expon, b = B[0].expon;
+    int i = 1, j = 1, count = 1;
+    while (i <= a && j <= b)
     {
-        fprintf(stderr, "Position is out of bounds \n");
-        exit(1);
-    }
-    if (!strlen(s))
-        strcpy(s, t);
-    else if (strlen(t))
-    {
-        strncpy(temp, s, i); // 複製 s 的前 i 個字元到 temp
-        temp[i] = '\0';
-        strcat(temp, t);       // 在後面加上 t
-        strcat(temp, (s + i)); // 加上 s 從第 i 個位置開始的剩餘字元
-        strcpy(s, temp);       // 把結果寫回 s
-    }
-}
-int naiveFind(char *string, char *pat)
-{
-    /* match the last character of pattern first,
-    and then match from the beginning */
-    int i, j, start = 0;
-    int lasts = strlen(string) - 1;
-    int lastp = strlen(pat) - 1;
-    int endmatch = lastp;
-    for (i = 0; endmatch <= lasts; endmatch++, start++)
-    {
-        if (string[endmatch] == pat[lastp])
-            for (j = 0, i = start; j < lastp && string[i] == pat[j]; i++, j++)
-                ; // empty statement: advance while matching
-        if (j == lastp)
-            return start; /* successful */
-    }
-    return -1;
-}
-// O(n · m).
-// 測試stack
-// fprintf(stderr, "Stack is FULL!!");
-typedef struct
-{
-    int key;
-} element;
-
-element stack[MAX];
-int top = -1;
-
-void push(element item)
-{
-    if (top >= MAX - 1)
-        return;
-    stack[++top] = item;
-}
-
-element pop()
-{
-    return stack[top--];
-}
-
-int isEmpty()
-{
-    return top == -1;
-}
-
-int Fibo_stack(int n)
-{
-    int result = 0;
-    element tmp;
-
-    tmp.key = n;
-    push(tmp); // bootstrapping
-
-    while (!isEmpty())
-    {
-        tmp = pop();
-
-        if (tmp.key == 0)
-        {
-            result += 0;
-        }
-        else if (tmp.key == 1)
-        {
-            result += 1;
-        }
+        if (A[i].expon > B[j].expon)
+            ans[count++] = A[i++];
+        else if (A[i].expon < B[j].expon)
+            ans[count++] = B[j++];
         else
         {
-            element a, b;
-            a.key = tmp.key - 1;
-            b.key = tmp.key - 2;
-            push(a);
-            push(b);
+            float sum = A[i].coef + B[j].coef;
+            if (sum != 0)
+            {
+                ans[count].coef = sum;
+                ans[count].expon = A[i].expon;
+                count++;
+            }
+            i++;
+            j++;
         }
     }
 
-    return result;
-}
-// 火車的問題在4個數字中3先出來變得不可能
-element queue[MAX_SIZE];
-int front = 0; // 指向第一個有效元素的位置
-int rear = 0;  // 指向最後一個有效元素的下一個位置
+    while (i <= a)
+        ans[count++] = A[i++];
+    while (j <= b)
+        ans[count++] = B[j++];
 
-// 判斷是否為空佇列
-int isEmpty()
-{
-    return front == rear;
+    ans[0].expon = count - 1;
 }
-
-// 判斷是否為滿佇列
-int isFull()
+void Polynomial_Multiplication(Poly A[], Poly B[], Poly ans[])
 {
-    return rear == MAX_SIZE;
-}
+    int a = A[0].expon, b = B[0].expon;
+    Poly temp[Max], result[Max];
+    result[0].expon = 0; // 結果初始化
+    result[1].coef = 0;
+    result[1].expon = 0;
 
-// 將元素加入佇列尾端
-void Enqueue(element item)
-{
-    if (isFull())
+    // 逐項相乘後加總
+    for (int i = 1; i <= a; i++)
     {
-        fprintf(stderr, "Queue is FULL!!\n");
-        return;
+        int count = 1;
+        for (int j = 1; j <= b; j++)
+        {
+            temp[count].coef = A[i].coef * B[j].coef;
+            temp[count].expon = A[i].expon + B[j].expon;
+            count++;
+        }
+        temp[0].expon = count - 1; // 暫存項數
+        Polynomial_Addition(result, temp, ans);
+        for (int k = 0; k <= ans[0].expon; k++)
+            result[k] = ans[k]; // 更新結果
     }
-    queue[rear++] = item; // 先放資料，再將 rear 往後移動
 }
 
-// 從佇列前端取出元素
-element Dequeue()
-{
-    element errKey;
-    if (isEmpty())
-    {
-        errKey.key = -99; // 錯誤碼
-        fprintf(stderr, "Queue is EMPTY!!\n");
-        return errKey;
-    }
-    return queue[front++]; // 取出資料，再將 front 往後移動
-}
-// 一般的佇列實作就只有這樣
-element queue[MAX_SIZE];
-int front = 0; // 指向佇列第一個有效元素的前一格
-int rear = 0;  // 指向佇列最後一個有效元素
-
-// 判斷是否為空佇列
-int isEmpty()
-{
-    return front == rear;
-}
-
-// 判斷是否為滿佇列（預留一格不用）
-int isFull()
-{
-    return (rear + 1) % MAX_SIZE == front;
-}
-
-// Enqueue：從尾端加入資料
-void Enqueue(element item)
-{
-    if (isFull())
-    {
-        fprintf(stderr, "Queue is FULL!!\n");
-        return;
-    }
-    rear = (rear + 1) % MAX_SIZE; // 先移動 rear
-    queue[rear] = item;           // 再放資料
-}
-
-// Dequeue：從前端取出資料
-element Dequeue()
-{
-    element errKey;
-    if (isEmpty())
-    {
-        errKey.key = -99; // 錯誤值
-        fprintf(stderr, "Queue is EMPTY!!\n");
-        return errKey;
-    }
-    front = (front + 1) % MAX_SIZE; // 先移到資料位置
-    return queue[front];            // 取出資料
-}
-// Circular Queue的資料結構更好,但是貨車問題的解法3以上就不能先出了
+/*
 int main()
 {
-    student a;
-    clock_t start = clock();
-    clock_t end = clock();
-    double cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
-    // cup time_used
-    printf("Time used: %f\n", cpu_time_used);
-    time_t start_time = time(NULL);
-    time_t end_time = time(NULL);
-    printf("Elapsed time: %ld seconds\n", end_time - start_time);
-    // realtime used
-
-    int i, n, key;
-    int list[MAX_SIZE];
-    scanf("%d", &n);
-    for (i = 0; i < n; i++)
+    int count = 0;
+    int n;
+    Poly P[10][Max], ans[Max];
+    while (1)
     {
-        list[i] = rand() % 1000;
-        printf("%d ", list[i]);
+        if (scanf("%d", &n) == EOF)
+            break;
+        P[count][0].expon = n;
+        for (int i = 1; i <= n; i++)
+        {
+            scanf("%f", &P[count][i].coef);
+        }
+        for (int i = 1; i <= n; i++)
+        {
+            scanf("%d", &P[count][i].expon);
+        }
+        count++;
     }
+    Poly temp[Max];
+    Polynomial_Addition(P[0], P[1], ans);
+    for (int i = 2; i < count; i++)
+    {
+        Polynomial_Addition(ans, P[i], temp);    // ✅ 先把結果放進 temp
+        for (int k = 0; k <= temp[0].expon; k++) // ✅ 再複製回 ans
+            ans[k] = temp[k];
+    }
+    printf("%d\n", ans[0].expon);
+    for (int i = 1; i <= ans[0].expon; i++)
+        printf("%.0f ", ans[i].coef);
     printf("\n");
-    Select_Sort(list, n);
-    for (i = 0; i < n; i++)
-        printf("%d ", list[i]);
+    for (int i = 1; i <= ans[0].expon; i++)
+        printf("%d ", ans[i].expon);
     printf("\n");
-    scanf("%d", &key);
-    Binary_Search(list, n, key);
-    return 0;
 }
+*/

@@ -56,6 +56,8 @@
         "valarray": "cpp",
         "map": "cpp",
         "system_error": "c",
-        "random": "c"
+        "random": "c",
+        "1.C": "cpp",
+        "chrono": "cpp"
     }
 }

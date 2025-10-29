@@ -23,7 +23,7 @@ void fast_transpose(term a[], term b[])
     for (int i = 1; i <= a[0].value; i++)
     {
         int j = starting_pos[a[i].row]++;
-        b[j + 1].col = a[i].row;
+        b[j + 1].col = a[i].row;          
         b[j + 1].row = a[i].col;
         b[j + 1].value = a[i].value;
     }
@@ -34,7 +34,6 @@ int main()
     scanf("%d", &a[0].col);
     scanf("%d", &a[0].row);
     scanf("%d", &a[0].value);
-    int row_terms[a[0].row];
     for (int i = 0; i < a[0].value; i++)
     {
         scanf("%d", &a[i + 1].col);
