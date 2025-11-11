@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>8-2</title>
+    <style>
+      body {
+        font-family: "Perpetua", "Noto Sans TC", serif;
+        background-color: #f5f5f5;
+        margin: 20px;
+      }
+      label {
+        margin-right: 8px;
+      }
+      input[type="text"],
+      input[type="number"],
+      input[type="url"] {
+        width: 200px;
+        margin: 3px;
+      }
+      table {
+        width: 90%;
+        border-collapse: collapse;
+        background-color: white;
+        margin-top: 15px;
+      }
+      th,
+      td {
+        border: 1px solid black;
+        padding: 6px;
+        text-align: center;
+      }
+      th {
+        background-color: darkblue;
+        color: white;
+      }
+      tr:nth-child(even) {
+        background-color: #e6f2ff;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div>
+      <label>Book Title:</label>
+      <input type="text" id="titleInput" placeholder="Enter book title" />
+      <label>Author(s):</label>
+      <input type="text" id="authorInput" placeholder="Enter author(s)" />
+      <label>Year:</label>
+      <input type="number" id="yearInput" placeholder="e.g. 2022" />
+      <label>Book URL:</label>
+      <input type="url" id="urlInput" placeholder="https://example.com" />
+    </div>
+
+    <div>
+      <input type="button" value="Add New Item" id="addButton" />
+      <input type="button" value="Remove All Items" id="removeAllButton" />
+    </div>
+    <hr />
+    <div id="display"></div>
+
+    <script>
+      function displayData() {
+        let display = document.getElementById("display");
+        display.innerHTML = "";
+
+        let table = document.createElement("table");
+        let header = `
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Year</th>
+                    <th>URL</th>
+                </tr>`;
+        table.innerHTML = header;
+
+        for (let i = 0; i < localStorage.length; i++) {
+          let key = localStorage.key(i);
+          if (key.startsWith("ntou-")) {
+            let item = JSON.parse(localStorage.getItem(key));
+            let row = document.createElement("tr");
+            row.innerHTML = `
+                        <td>${item.title}</td>
+                        <td>${item.author}</td>
+                        <td>${item.year}</td>
+                        <td><a href="${item.url}" target="_blank">${item.url}</a></td>`;
+            table.appendChild(row);
+          }
+        }
+
+        display.appendChild(table);
+      }
+      document.getElementById("addButton").onclick = function () {
+        let title = document.getElementById("titleInput").value.trim();
+        let author = document.getElementById("authorInput").value.trim();
+        let year = document.getElementById("yearInput").value.trim();
+        let url = document.getElementById("urlInput").value.trim();
+
+        if (!title || !author || !year || !url) {
+          alert("Please fill in all fields!");
+          return;
+        }
+        let key = "ntou-" + new Date().getTime();
+        let bookData = {
+          title: title,
+          author: author,
+          year: year,
+          url: url,
+        };
+        localStorage.setItem(key, JSON.stringify(bookData));
+        document.getElementById("titleInput").value = "";
+        document.getElementById("authorInput").value = "";
+        document.getElementById("yearInput").value = "";
+        document.getElementById("urlInput").value = "";
+
+        displayData();
+      };
+      document.getElementById("removeAllButton").onclick = function () {
+        let toRemove = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          let key = localStorage.key(i);
+          if (key.startsWith("ntou-")) {
+            toRemove.push(key);
+          }
+        }
+        toRemove.forEach((k) => localStorage.removeItem(k));
+        alert("All items were removed!");
+        displayData();
+      };
+      window.onload = displayData;
+    </script>
+  </body>
+</html>
