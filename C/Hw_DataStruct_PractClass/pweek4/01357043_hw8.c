@@ -55,7 +55,7 @@ bool solveSudoku()
         {
             grid[row][col] = num;
 
-            if (solveSudoku())
+            if(solveSudoku())
                 return true;
 
             grid[row][col] = UNASSIGNED;

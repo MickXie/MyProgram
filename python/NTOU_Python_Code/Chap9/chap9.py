@@ -210,7 +210,7 @@ print("字典2:", list_dict2)       # {'name': 'Chicago', 'city': 'Chicago'}
 
 # 使用「元組」建立字典
 seq2 = ('name', 'city')
-
+tup=dict,fromkeys(sq2,111)
 tup_dict1 = dict.fromkeys(seq2)
 print("字典3:", tup_dict1)
 
@@ -234,7 +234,7 @@ print("Value =", ret_value2)
 
 ret_value3 = fruits.get('Grape', 10)  # 找不到 → 回傳預設值 10
 print("Value =", ret_value3)
-
+r=et_value4 = fruits.get('Apple', 10)  # 找到 → 回傳 20（不使用預設值）
 # ------------------------------------------------------------
 # dict.setdefault(key, default)
 #
@@ -253,7 +253,7 @@ print("fruits 字典:", fruits)     # 不會改變
 ret_value = fruits.setdefault('Orange', 100)
 print("Value =", ret_value)       # 還是 25
 print("fruits 字典:", fruits)
-
+frute=setdefault('Grape', 10)  # key 'Grape' 不存在，新增它
 # ------------------------------------------------------------
 # key 不存在，就會自動新增
 # ------------------------------------------------------------
