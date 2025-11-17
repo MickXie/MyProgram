@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>我的軟體開發技術書籍收藏</title>
+    <style>
+      @import url("https://fonts.googleapis.com/earlyaccess/cwtexfangsong.css");
+      body {
+        font-family: cwTeXFangSong;
+      }
+      h1 {
+        color: darkblue;
+        font-size: 32px;
+        text-align: center;
+      }
+
+      p {
+        color: #030303;
+        background-color: #d4f1f9;
+        padding: 10px;
+        border-radius: 5px;
+      }
+      .inputform {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+      }
+      #bookname{
+        flex-basis:50%
+      }
+      #bookurl{
+        flex-basis:50%
+      }
+      #bookdescription{
+        flex-basis: 100%;
+      }
+      .btn{
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+      }
+      #bookList{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+      .book {
+        flex-basis: 50%;        
+        clear: both;
+        box-sizing: border-box;
+        padding: 10px;
+      }
+      .book img {
+        float: left;
+        width: 150px;
+        height: 150px;
+      }
+
+      .book-title {
+        font-weight: bolder;
+        color: orange;
+        max-width: 100%;
+        overflow-wrap: break-word;
+      }
+
+      .book-description {
+        font-size: 0.8em;
+        color: gray;
+        max-width: 100%;
+        overflow-wrap: break-word;
+      }
+      .book-url a {
+        text-decoration: none;
+      }
+      input {
+        padding: 10px;
+        margin-bottom: 5px;
+        float: left;
+        box-sizing: border-box;
+      }
+
+      input.longInput {
+        width: 100%;
+      }
+
+      button {
+        width: 33%;
+        position: relative;
+        left: 33%;
+        padding: 10px;
+        border-radius: 10px;
+        border: 0px;
+        background: orange;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      @media (max-width: 600px) {
+        .inputform {
+        flex-direction: column;
+      }
+      #bookname{
+        flex-basis:100%
+      }
+      #bookurl{
+        flex-basis:100%
+      }
+      #bookdescription{
+        flex-basis: 100%;
+      }
+      #bookList{
+        flex-direction: column;
+      }
+      .book {
+        flex-basis: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;   
+        align-items: center;    
+      }
+      .book img {
+        float: none;
+      }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- HTML 部分 -->
+    <h1>我的軟體開發技術書籍收藏</h1>
+    <p>主要收藏Web programming與Software engineering相關書籍</p>
+
+    <!-- 使用者輸入 -->
+     <div class="inputform">
+        <input type="text" placeholder="輸入書籍名稱" id="bookname">
+        <input type="text" placeholder="輸入書籍連結" id="bookurl">
+        <input type="text" placeholder="輸入書籍描述" id="bookdescription">
+    </div>
+    <div class="btn">
+        <button id="addButton">新增書籍</button>
+    </div>
+    <hr />
+
+    <div id="bookList">    <!-- JavaScript -->
+    <script>
+      let bookArray = [
+        `<div class="book">
+                <img src="https://picsum.photos/150/150" alt="書籍封面">
+                <div class="book-title">《JavaScript: The Good Parts》</div>
+                <div class="book-url"><a href="https://example.com/js-good-parts" target="_blank">書籍連結</a></div>
+                <div class="book-description">由Douglas Crockford撰寫，是深入理解JavaScript精髓的經典書籍。</div>
+            </div>`,
+        `<div class="book">
+                <img src="https://picsum.photos/150/150" alt="書籍封面">
+                <div class="book-title">《Clean Code》</div>
+                <div class="book-url"><a href="https://example.com/clean-code" target="_blank">書籍連結</a></div>
+                <div class="book-description">Robert C. Martin所著，介紹如何撰寫可維護且清晰的程式碼。</div>
+            </div>`,
+      ];
+      document
+        .getElementById("addButton")
+        .addEventListener("click", addBook, false);
+      function addBook() {
+        let name=document.getElementById("bookname").value;
+        let url=document.getElementById("bookurl").value;
+        let description=document.getElementById("bookdescription").value;
+        if(name=="" || url=="" || description==""){
+          alert("請完整輸入書籍資訊");
+          return;
+        }
+        let newbook=`<div class="book">
+                <img src="https://picsum.photos/150/150" alt="書籍封面">
+                <div class="book-title">${name}</div>
+                <div class="book-url"><a href="${url}" target="_blank">書籍連結</a></div>
+                <div class="book-description">${description}</div>
+            </div>`;
+        bookArray.push(newbook);
+        document.getElementById("bookList").innerHTML = bookArray.join(" ");
+      }
+    </script>
+  </body>
+</html>
