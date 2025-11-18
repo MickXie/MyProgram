@@ -5406,3 +5406,185 @@ document.addEventListener("mousemove", function (e) {
 //   bubble      → 會冒泡（父事件也會被觸發）
 //   noBubble    → 不會冒泡（事件停在子元素）
 // ===============================================================
+下面我幫你把 **`img.style` 會常用到的 CSS 屬性全部分類整理**，
+每一個都附上 **作用說明（簡單但理解最到位）**，保證清楚！
+
+---
+
+# ✅ **《img.style 常用屬性分類＋用途整理》**
+
+# ⭐ 1. **尺寸（Size）**
+
+用來控制圖片的大小。
+
+| 屬性            | 作用                                                            |
+| ------------- | ------------------------------------------------------------- |
+| **width**     | 設定圖片寬度，例如 `"150px"`、`"50%"`                                   |
+| **height**    | 設定圖片高度                                                        |
+| **maxWidth**  | 限制圖片最大寬度（RWD 常用）                                              |
+| **maxHeight** | 限制圖片最大高度                                                      |
+| **minWidth**  | 限制圖片最小寬度                                                      |
+| **minHeight** | 限制圖片最小高度                                                      |
+| **boxSizing** | 是否包含 padding/border 在 width 計算內 (`content-box`, `border-box`) |
+
+---
+
+# ⭐ 2. **位置定位（Positioning）**
+
+與 `position:` 搭配（absolute/relative/fixed/sticky）。
+
+| 屬性           | 作用                              |
+| ------------ | ------------------------------- |
+| **position** | 設定定位模式，例如：`absolute`、`relative` |
+| **left**     | 元素左邊對齊座標                        |
+| **right**    | 元素右邊對齊座標                        |
+| **top**      | 元素頂部座標                          |
+| **bottom**   | 元素底部座標                          |
+| **zIndex**   | 控制圖片前後層級（數字越大越上面）               |
+
+---
+
+# ⭐ 3. **顯示類型（Display / Visibility）**
+
+控制元素是否顯示、形式、透明度。
+
+| 屬性             | 作用                            |
+| -------------- | ----------------------------- |
+| **display**    | block, inline-block, none ... |
+| **visibility** | `visible` / `hidden`（仍占空間）    |
+| **opacity**    | 透明度（0 = 完全透明，1 = 不透明）         |
+
+---
+
+# ⭐ 4. **邊界控制（Spacing：Margin / Padding / Border）**
+
+### 📌 Margin（外距）
+
+| 屬性                                                                  | 作用        |
+| ------------------------------------------------------------------- | --------- |
+| **margin**                                                          | 外距，一次設定四邊 |
+| **marginLeft** / **marginRight** / **marginTop** / **marginBottom** | 個別設定      |
+
+### 📌 Padding（內距）
+
+（圖片一般不需要 padding，但仍可以設定）
+
+| 屬性             | 作用   |
+| -------------- | ---- |
+| padding        | 內距   |
+| paddingLeft 等… | 個別設定 |
+
+### 📌 Border（邊框）
+
+| 屬性           | 作用                           |
+| ------------ | ---------------------------- |
+| border       | 一次設定整個邊框（粗細、樣式、顏色）           |
+| borderWidth  | 邊框粗細                         |
+| borderColor  | 顏色                           |
+| borderStyle  | `solid`, `dotted`, `dashed`… |
+| borderRadius | 圓角（可做圓形圖片）                   |
+
+---
+
+# ⭐ 5. **圖片專用屬性（超重要）**
+
+這些屬性只與「圖片如何被裁切」相關。
+
+| 屬性                 | 作用                                                                                                   |
+| ------------------ | ---------------------------------------------------------------------------------------------------- |
+| **objectFit**      | 控制圖片如何塞進容器： <br> - `cover` 填滿但裁切 <br> - `contain` 完整顯示但可能留空白 <br> - `fill` 拉伸變形 <br> - `none` 使用原始大小 |
+| **objectPosition** | 圖片對齊方式，例如：`center`、`top`、`left`                                                                      |
+
+---
+
+# ⭐ 6. **浮動（Float）**
+
+舊式排版技術。
+
+| 屬性        | 作用                      |
+| --------- | ----------------------- |
+| **float** | `left`, `right`，讓圖片左右浮動 |
+| **clear** | 清除浮動（避免元素被卡住）           |
+
+---
+
+# ⭐ 7. **背景屬性（即使是 img 也能設定）**
+
+| 屬性                 | 作用                         |
+| ------------------ | -------------------------- |
+| backgroundColor    | 背景色（不常用於 `<img>`）          |
+| backgroundImage    | 背景圖片                       |
+| backgroundSize     | 控制背景大小，如 `cover`、`contain` |
+| backgroundRepeat   | 背景是否重複                     |
+| backgroundPosition | 背景定位                       |
+
+---
+
+# ⭐ 8. **文字相關**（圖片本身不會顯示字，但仍是 CSS 屬性）
+
+| 屬性       | 作用             |
+| -------- | -------------- |
+| color    | 字體顏色（通常圖片不會使用） |
+| fontSize | 字體大小           |
+
+---
+
+# ⭐ 9. **視覺效果（Filter / Transform / Transition 等）**
+
+| 屬性             | 作用                                                    |
+| -------------- | ----------------------------------------------------- |
+| **filter**     | 濾鏡，如 `blur(5px)`、`brightness(120%)`、`grayscale(100%)` |
+| **transform**  | 縮放旋轉：`scale()`、`rotate()`、`translate()`               |
+| **transition** | 動畫過渡效果（hover 放大常用）                                    |
+
+---
+
+# ⭐ 10. **動畫（Animation）**
+
+| 屬性                      | 作用        |
+| ----------------------- | --------- |
+| animation               | CSS 動畫主屬性 |
+| animationDuration       | 動畫時間      |
+| animationTimingFunction | 動畫速度曲線    |
+| animationIterationCount | 重複次數      |
+
+---
+
+# ⭐ 11. **捲動行為（Scroll）**
+
+| 屬性        | 作用                       |
+| --------- | ------------------------ |
+| scrollTop | 捲軸位置（對 `<img>` 沒用）       |
+| overflow  | 超出內容的處理方式（hidden/scroll） |
+
+---
+
+# 🎯 最精簡分類記憶法（為你專屬整理）
+
+你在 `<img>` 最常用的是：
+
+### ✔ 尺寸 → width / height
+
+### ✔ 排版 → float / margin / display
+
+### ✔ RWD → max-width / object-fit
+
+### ✔ 動畫 → transition / transform
+
+### ✔ 定位 → position + left/top
+
+這些占了實務中 **95%** 使用率。
+
+---
+
+# 想要我幫你做成 PDF / DOCX 格式嗎？
+
+你常在做課堂講義，我可以幫你把：
+
+📌 分類表
+📌 重點整理
+📌 使用範例
+
+全部排版成 **可列印的 A4.docx** 給你。
+
+需要我做嗎？
