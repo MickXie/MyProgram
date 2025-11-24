@@ -1,71 +1,220 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset="utf-8">
+  <head>
+    <meta charset="utf-8" />
     <title>Pin Pictures</title>
-    <style type="text/css">
-        div.nav {
-            border: 1px solid skyBlue;
-            margin-left: 3px;
-            padding: 3px;
-            float: left;
-        }
+    <style>
+      div.nav {
+        border: 1px solid skyBlue;
+        margin-left: 3px;
+        padding: 3px;
+        float: left;
+      }
 
-        input, p, li {
-            font-family: Helvetica, "Microsoft YaHei", "LiHei Pro", TW-Kai;
-        }
+      input,
+      p,
+      li {
+        font-family: Helvetica, "Microsoft YaHei", "LiHei Pro", TW-Kai;
+      }
 
-        li {
-            font-size: 12px;
-        }
+      li {
+        font-size: 12px;
+      }
 
-        img.picture {
-            position: absolute;
-        }
+      /* 所有圖片絕對定位 */
+      img.picture {
+        position: absolute;
+        width: 200px;
+        height: 200px;
+      }
+
+      img.pin {
+        position: absolute;
+        width: 30px;
+      }
+
+      #blackboard {
+        position: relative;
+        float: left;
+        z-index: 0;
+      }
     </style>
-    <script type="text/javascript">
-    </script>
-</head>
+  </head>
 
-<body>
-    <img src="blackboard.jpg" height="720" width="960" style="float:left; z-index:0;" />
-    <img id="img-0" class="picture" style="top: 50px; left: 50px; z-index:1;" src="doraemon.png" />
-    <img id="pin-0" class="picture" style="top: 40px; left: 135px; z-index:1;" width="30px" src="red.png" />
+  <body>
+    <img id="blackboard" src="blackboard.jpg" height="720" width="960" />
 
     <div id="nav" class="nav">
-        <form action="#">
-            <p>
-                <label>要放哪個道具圖片(請輸入編號):
-                    <input type="number" id="pic" min="1" max="10" step="1" value="1" />
-                </label>
-                <br />
-                <label>圖片X座標:
-                    <input type="number" id="x" min="40" max="600" step="1" value="40" />
-                </label>
-                <br />
-                <label>圖片Y座標:
-                    <input type="number" id="y" min="40" max="400" step="1" value="100" />
-                </label>
-            </p>
-            <p>
-                <input type="button" value="新增圖片" id="addButton">
-                <input type="button" value="移除所有圖片" id="removeAllButton">
-            </p>
-        </form>
-        <ul>
-            <li>[01]任意門</li>
-            <li>[02]時光機</li>
-            <li>[03]竹蜻蜓</li>
-            <li>[04]時光布</li>
-            <li>[05]記憶麵包</li>
-            <li>[06]縮小燈</li>
-            <li>[07]翻譯蒟蒻</li>
-            <li>[08]如果電話亭</li>
-            <li>[09]穿透環</li>
-            <li>[10]更衣照相機</li>
-        </ul>
+      <form action="#">
+        <p>
+          <label
+            >要放哪個道具圖片(請輸入編號):
+            <input type="number" id="pic" min="1" max="10" step="1" value="1" />
+          </label>
+          <br />
+          <label
+            >圖片X座標:
+            <input
+              type="number"
+              id="x"
+              min="40"
+              max="600"
+              step="1"
+              value="40"
+            />
+          </label>
+          <br />
+          <label
+            >圖片Y座標:
+            <input
+              type="number"
+              id="y"
+              min="40"
+              max="400"
+              step="1"
+              value="100"
+            />
+          </label>
+        </p>
+        <p>
+          <input type="button" value="新增圖片" id="addButton" />
+          <input type="button" value="移除所有圖片" id="removeAllButton" />
+        </p>
+      </form>
+      <ul>
+        <li>[01]任意門</li>
+        <li>[02]時光機</li>
+        <li>[03]竹蜻蜓</li>
+        <li>[04]時光布</li>
+        <li>[05]記憶麵包</li>
+        <li>[06]縮小燈</li>
+        <li>[07]翻譯蒟蒻</li>
+        <li>[08]如果電話亭</li>
+        <li>[09]穿透環</li>
+        <li>[10]更衣照相機</li>
+      </ul>
     </div>
-</body>
 
+    <script>
+      const pinColors = ["red.png", "blue.png", "yellow.png"];
+      let zTop = 10; // 用於確保新加入的圖層會在最上層
+
+      const addButton = document.getElementById("addButton");
+      const removeAllButton = document.getElementById("removeAllButton");
+
+      // --- 讀取舊資料，恢復圖片 ---
+      window.onload = function () {
+        let saved = localStorage.getItem("pins");
+        if (saved) {
+          JSON.parse(saved).forEach((obj) => {
+            createPicture(obj.pic, obj.x, obj.y, obj.pin, obj.id, obj.z);
+          });
+        }
+      };
+
+      // --- 新增圖片 ---
+      addButton.onclick = function () {
+        let picNum = document.getElementById("pic").value;
+        let x = parseInt(document.getElementById("x").value);
+        let y = parseInt(document.getElementById("y").value);
+
+        let id = "p" + Date.now();
+        let pin = pinColors[Math.floor(Math.random() * 3)];
+
+        createPicture(picNum, x, y, pin, id, zTop);
+        saveToLocalStorage();
+
+        zTop++;
+      };
+
+      // --- 移除全部 ---
+      removeAllButton.onclick = function () {
+        document
+          .querySelectorAll(".picture, .pin")
+          .forEach((el) => el.remove());
+        localStorage.removeItem("pins");
+      };
+
+      // --- 建立圖片 + 釘子 ---
+      function createPicture(picNum, x, y, pin, id, z) {
+        let pic = document.createElement("img");
+        let picName = String(picNum).padStart(2, "0");
+        pic.src = `${picName}` + ".jpg"; // 圖片名稱：1.jpg ~ 10.jpg
+        pic.className = "picture";
+        pic.style.left = x + "px";
+        pic.style.top = y + "px";
+        pic.style.zIndex = z;
+        pic.id = id;
+
+        // 釘子：固定相對位置（位於圖片上方中間）
+        let pinImg = document.createElement("img");
+        pinImg.src = pin;
+        pinImg.className = "pin";
+        pinImg.style.left = x + 85 + "px"; // 200 寬，置中位置 = x + (200/2 - 15)
+        pinImg.style.top = y - 15 + "px";
+        pinImg.style.zIndex = z + 1; // pin永遠在圖上方
+        pinImg.id = id + "-pin";
+
+        enableDrag(pic, pinImg);
+
+        document.body.appendChild(pic);
+        document.body.appendChild(pinImg);
+      }
+
+      // --- 讓圖片可以拖曳 ---
+      function enableDrag(pic, pinImg) {
+        let offsetX, offsetY;
+        let dragging = false;
+
+        pic.onmousedown = function (e) {
+          dragging = true;
+          offsetX = e.clientX - pic.offsetLeft;
+          offsetY = e.clientY - pic.offsetTop;
+
+          pic.style.zIndex = ++zTop;
+          pinImg.style.zIndex = zTop + 1;
+        };
+
+        document.onmousemove = function (e) {
+          if (!dragging) return;
+
+          let newX = e.clientX - offsetX;
+          let newY = e.clientY - offsetY;
+
+          pic.style.left = newX + "px";
+          pic.style.top = newY + "px";
+
+          pinImg.style.left = newX + 85 + "px";
+          pinImg.style.top = newY - 15 + "px";
+        };
+
+        document.onmouseup = function () {
+          if (dragging) {
+            dragging = false;
+            saveToLocalStorage();
+          }
+        };
+      }
+
+      // --- 儲存到 LocalStorage ---
+      function saveToLocalStorage() {
+        let items = [];
+
+        document.querySelectorAll(".picture").forEach((pic) => {
+          let pin = document.getElementById(pic.id + "-pin");
+
+          items.push({
+            id: pic.id,
+            pic: pic.src.split("/").pop().replace(".jpg", ""),
+            x: parseInt(pic.style.left),
+            y: parseInt(pic.style.top),
+            pin: pin.src.split("/").pop(),
+            z: parseInt(pic.style.zIndex),
+          });
+        });
+
+        localStorage.setItem("pins", JSON.stringify(items));
+      }
+    </script>
+  </body>
 </html>
