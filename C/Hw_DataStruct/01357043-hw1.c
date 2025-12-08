@@ -1,47 +1,64 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-int main(void)
+typedef struct node *treePointer;
+typedef struct node
 {
-    double *nums = NULL;
-    size_t cap = 0, len = 0;
-    double v;
-
-    printf("(Enter any non-numeric word or character to start the calculation.)\n");
-
-    while (scanf("%lf", &v) == 1)
+    int data;
+    treePointer leftChild, rightChild;
+} Node;
+treePointer newNode(int data)
+{
+    treePointer n = (treePointer)malloc(sizeof(Node));
+    n->data = data;
+    n->leftChild = n->rightChild = NULL;
+    return n;
+}
+void postorderIter(treePointer root)
+{
+    treePointer stack[1000];
+    int top = -1;
+    treePointer curr = root;
+    treePointer lastVisited = NULL;
+    while (curr != NULL || top != -1)
     {
-        if (len == cap)
+        if (curr != NULL)
         {
-            cap = cap ? cap * 2 : 8;
-            double *tmp = (double *)realloc(nums, cap * sizeof(double));
-            if (!tmp)
-            {
-                free(nums);
-                return 1;
-            }
-            nums = tmp;
+            stack[++top] = curr;
+            curr = curr->leftChild;
         }
-        nums[len++] = v;
+        else
+        {
+            treePointer peek = stack[top];
+            if (peek->rightChild != NULL && lastVisited != peek->rightChild)
+            {
+                curr = peek->rightChild;
+            }
+            else
+            {
+                printf("%d ", peek->data);
+                lastVisited = peek;
+                top--;
+            }
+        }
     }
+}
 
-    if (len < 2)
-    {
-        fprintf(stderr, "Error: need coefficients and x.\n");
-        free(nums);
-        return 1;
-    }
+treePointer buildExampleTree()
+{
+    treePointer root = newNode(1);
+    root->leftChild = newNode(2);
+    root->rightChild = newNode(3);
+    root->leftChild->leftChild = newNode(4);
+    root->leftChild->rightChild = newNode(5);
+    return root;
+}
 
-    double x = nums[len - 1];
-    double result = nums[0];
+int main()
+{
+    treePointer root = buildExampleTree();
+    printf("Iterative postorder: ");
+    postorderIter(root);
+    printf("\n");
 
-    for (size_t i = 1; i < len - 1; ++i)
-    {
-        result = result * x + nums[i];
-    }
-
-    printf("\n%.10g\n", result);
-
-    free(nums);
     return 0;
 }
