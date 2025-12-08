@@ -3,7 +3,25 @@
   <head>
     <meta charset="utf-8" />
     <title>Pin Pictures</title>
+
     <style>
+      body {
+        font-family: Helvetica, "Microsoft YaHei", "LiHei Pro", TW-Kai;
+      }
+
+      #board-container {
+        position: relative;
+        width: 960px;
+        height: 720px;
+        float: left;
+        border: 0;
+      }
+
+      #blackboard {
+        width: 960px;
+        height: 720px;
+      }
+
       div.nav {
         border: 1px solid skyBlue;
         margin-left: 3px;
@@ -11,76 +29,61 @@
         float: left;
       }
 
-      input,
-      p,
-      li {
-        font-family: Helvetica, "Microsoft YaHei", "LiHei Pro", TW-Kai;
-      }
-
-      li {
-        font-size: 12px;
-      }
-
-      /* 所有圖片絕對定位 */
       img.picture {
         position: absolute;
         width: 200px;
         height: 200px;
+        cursor: move;
       }
 
       img.pin {
         position: absolute;
         width: 30px;
+        pointer-events: none;
       }
 
-      #blackboard {
-        position: relative;
-        float: left;
-        z-index: 0;
+      li {
+        font-size: 12px;
       }
     </style>
   </head>
 
   <body>
-    <img id="blackboard" src="blackboard.jpg" height="720" width="960" />
+    <div id="board-container">
+      <img id="blackboard" src="blackboard.jpg" />
+    </div>
 
+    <!-- 控制區 -->
     <div id="nav" class="nav">
       <form action="#">
         <p>
           <label
-            >要放哪個道具圖片(請輸入編號):
-            <input type="number" id="pic" min="1" max="10" step="1" value="1" />
-          </label>
-          <br />
-          <label
-            >圖片X座標:
+            >要放哪個道具圖片:
             <input
               type="number"
-              id="x"
-              min="40"
-              max="600"
+              id="pic"
+              min="1"
+              max="10"
               step="1"
-              value="40"
-            />
-          </label>
-          <br />
+              value="1"
+            /> </label
+          ><br />
+
+          <label>圖片X座標: <input type="number" id="x" value="40" /> </label
+          ><br />
+
           <label
             >圖片Y座標:
-            <input
-              type="number"
-              id="y"
-              min="40"
-              max="400"
-              step="1"
-              value="100"
-            />
+            <input type="number" id="y" value="100" />
           </label>
         </p>
+
         <p>
-          <input type="button" value="新增圖片" id="addButton" />
-          <input type="button" value="移除所有圖片" id="removeAllButton" />
+          <button type="button" id="addButton">新增圖片</button>
+          <button type="button" id="removeAllButton">移除所有圖片</button>
         </p>
       </form>
+
       <ul>
         <li>[01]任意門</li>
         <li>[02]時光機</li>
@@ -97,12 +100,9 @@
 
     <script>
       const pinColors = ["red.png", "blue.png", "yellow.png"];
-      let zTop = 10; // 用於確保新加入的圖層會在最上層
+      let zTop = 10;
+      const board = document.getElementById("board-container");
 
-      const addButton = document.getElementById("addButton");
-      const removeAllButton = document.getElementById("removeAllButton");
-
-      // --- 讀取舊資料，恢復圖片 ---
       window.onload = function () {
         let saved = localStorage.getItem("pins");
         if (saved) {
@@ -112,64 +112,60 @@
         }
       };
 
-      // --- 新增圖片 ---
-      addButton.onclick = function () {
+      document.getElementById("addButton").onclick = function () {
         let picNum = document.getElementById("pic").value;
         let x = parseInt(document.getElementById("x").value);
         let y = parseInt(document.getElementById("y").value);
 
         let id = "p" + Date.now();
-        let pin = pinColors[Math.floor(Math.random() * 3)];
+        let rpin = pinColors[Math.floor(Math.random() * 3)];
 
-        createPicture(picNum, x, y, pin, id, zTop);
+        createPicture(picNum, x, y, rpin, id, ++zTop);
         saveToLocalStorage();
-
-        zTop++;
       };
 
-      // --- 移除全部 ---
-      removeAllButton.onclick = function () {
+      document.getElementById("removeAllButton").onclick = function () {
         document
           .querySelectorAll(".picture, .pin")
           .forEach((el) => el.remove());
         localStorage.removeItem("pins");
       };
 
-      // --- 建立圖片 + 釘子 ---
       function createPicture(picNum, x, y, pin, id, z) {
         let pic = document.createElement("img");
-        let picName = String(picNum).padStart(2, "0");
-        pic.src = `${picName}` + ".jpg"; // 圖片名稱：1.jpg ~ 10.jpg
         pic.className = "picture";
+        pic.id = id;
+
+        let picName = String(picNum).padStart(2, "0");
+        pic.src = picName + ".png";
+
         pic.style.left = x + "px";
         pic.style.top = y + "px";
         pic.style.zIndex = z;
-        pic.id = id;
 
-        // 釘子：固定相對位置（位於圖片上方中間）
         let pinImg = document.createElement("img");
-        pinImg.src = pin;
         pinImg.className = "pin";
-        pinImg.style.left = x + 85 + "px"; // 200 寬，置中位置 = x + (200/2 - 15)
-        pinImg.style.top = y - 15 + "px";
-        pinImg.style.zIndex = z + 1; // pin永遠在圖上方
         pinImg.id = id + "-pin";
+        pinImg.src = pin;
+
+        pinImg.style.left = x + 85 + "px";
+        pinImg.style.top = y - 15 + "px";
+        pinImg.style.zIndex = z + 1;
+
+        board.appendChild(pic);
+        board.appendChild(pinImg);
 
         enableDrag(pic, pinImg);
-
-        document.body.appendChild(pic);
-        document.body.appendChild(pinImg);
       }
 
-      // --- 讓圖片可以拖曳 ---
       function enableDrag(pic, pinImg) {
         let offsetX, offsetY;
         let dragging = false;
 
         pic.onmousedown = function (e) {
           dragging = true;
-          offsetX = e.clientX - pic.offsetLeft;
-          offsetY = e.clientY - pic.offsetTop;
+          offsetX = e.offsetX;
+          offsetY = e.offsetY;
 
           pic.style.zIndex = ++zTop;
           pinImg.style.zIndex = zTop + 1;
@@ -178,8 +174,12 @@
         document.onmousemove = function (e) {
           if (!dragging) return;
 
-          let newX = e.clientX - offsetX;
-          let newY = e.clientY - offsetY;
+          let rect = board.getBoundingClientRect();
+          let newX = e.clientX - rect.left - offsetX;
+          let newY = e.clientY - rect.top - offsetY;
+
+          newX = Math.max(0, Math.min(newX, board.clientWidth - 200));
+          newY = Math.max(0, Math.min(newY, board.clientHeight - 200));
 
           pic.style.left = newX + "px";
           pic.style.top = newY + "px";
@@ -196,16 +196,13 @@
         };
       }
 
-      // --- 儲存到 LocalStorage ---
       function saveToLocalStorage() {
         let items = [];
-
         document.querySelectorAll(".picture").forEach((pic) => {
           let pin = document.getElementById(pic.id + "-pin");
-
           items.push({
             id: pic.id,
-            pic: pic.src.split("/").pop().replace(".jpg", ""),
+            pic: pic.src.split("/").pop().replace(".png", ""),
             x: parseInt(pic.style.left),
             y: parseInt(pic.style.top),
             pin: pin.src.split("/").pop(),
