@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <title>NTOU News</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="bg-primary-subtle m-3">
+    <div class="jumbotron text-center">
+      <h1 class="display-4">海大新聞</h1>
+      <p class="lead">這是臺灣海洋大學的最新消息與公告</p>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row" id="newsContainer">
+        <!-- JS will fill news here -->
+      </div>
+    </div>
+
+    <script>
+      const apiURL = "https://ntou-news-2024.onrender.com/news";
+      const container = document.getElementById("newsContainer");
+
+      async function loadNews() {
+        try {
+          const response = await fetch(apiURL);
+          const news = await response.json();
+
+          container.innerHTML = ""; // 清空舊的內容
+
+          news.forEach((item) => {
+            const title = item.title || "無標題";
+            const publisher = item.publisher || "未提供單位";
+            const date = item.date || "無日期";
+            const link = item.link || "#";
+
+            const cardHTML = `
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <a href="${link}" target="_blank">
+                                <h5 class="card-title">${title}</h5>
+                            </a>
+                            <p class="card-text">
+                                <small class="text-muted">${date} - ${publisher}</small>
+                            </p>
+                        </div>
+                    </div>
+                </div>`;
+
+            container.insertAdjacentHTML("beforeend", cardHTML);
+          });
+        } catch (err) {
+          console.error("Error loading news:", err);
+          container.innerHTML = `<p class="text-danger">無法載入新聞資料</p>`;
+        }
+      }
+      loadNews();
+    </script>
+  </body>
+</html>

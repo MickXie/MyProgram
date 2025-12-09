@@ -1,182 +1,1057 @@
 <!DOCTYPE html>
-<html lang="zh-tw">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>我的軟體開發技術書籍收藏</title>
-    <style>
-      @import url("https://fonts.googleapis.com/earlyaccess/cwtexfangsong.css");
-      body {
-        font-family: cwTeXFangSong;
-      }
-      h1 {
-        color: darkblue;
-        font-size: 32px;
-        text-align: center;
-      }
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <title>公車營運資料儀表板</title>
 
-      p {
-        color: #030303;
-        background-color: #d4f1f9;
-        padding: 10px;
-        border-radius: 5px;
-      }
-      .inputform {
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: row;
-      }
-      #bookname{
-        flex-basis:50%
-      }
-      #bookurl{
-        flex-basis:50%
-      }
-      #bookdescription{
-        flex-basis: 100%;
-      }
-      .btn{
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-      }
-      #bookList{
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-      }
-      .book {
-        flex-basis: 50%;        
-        clear: both;
-        box-sizing: border-box;
-        padding: 10px;
-      }
-      .book img {
-        float: left;
-        width: 150px;
-        height: 150px;
-      }
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- SheetJS 讀 Excel -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
-      .book-title {
-        font-weight: bolder;
-        color: orange;
-        max-width: 100%;
-        overflow-wrap: break-word;
-      }
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Microsoft JhengHei", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f7;
+      color: #222;
+    }
 
-      .book-description {
-        font-size: 0.8em;
-        color: gray;
-        max-width: 100%;
-        overflow-wrap: break-word;
-      }
-      .book-url a {
-        text-decoration: none;
-      }
-      input {
-        padding: 10px;
-        margin-bottom: 5px;
-        float: left;
-        box-sizing: border-box;
-      }
+    header {
+      background: #1f2933;
+      color: #fff;
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-      input.longInput {
-        width: 100%;
-      }
+    header h1 {
+      margin: 0;
+      font-size: 20px;
+    }
 
-      button {
-        width: 33%;
-        position: relative;
-        left: 33%;
-        padding: 10px;
-        border-radius: 10px;
-        border: 0px;
-        background: orange;
-        font-size: 14px;
-        cursor: pointer;
-      }
-      @media (max-width: 600px) {
-        .inputform {
+    header small {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    main {
+      padding: 20px 32px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section {
+      margin-bottom: 32px;
+      background: #fff;
+      padding: 16px 20px 20px;
+      border-radius: 10px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+
+    .section h2 {
+      margin-top: 0;
+      font-size: 18px;
+      border-left: 4px solid #2563eb;
+      padding-left: 8px;
+    }
+
+    .section p {
+      margin: 4px 0 10px;
+      font-size: 13px;
+      color: #555;
+    }
+
+    .upload-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    input[type="file"] {
+      font-size: 13px;
+    }
+
+    select,
+    input[type="date"],
+    input[type="number"] {
+      padding: 4px 6px;
+      font-size: 13px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      min-width: 140px;
+    }
+
+    button {
+      padding: 6px 12px;
+      font-size: 13px;
+      border-radius: 4px;
+      border: none;
+      background: #2563eb;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background: #999;
+      cursor: not-allowed;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .kpi-card {
+      background: #f9fafb;
+      border-radius: 8px;
+      padding: 10px 12px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .kpi-title {
+      font-size: 12px;
+      color: #6b7280;
+      margin-bottom: 4px;
+    }
+
+    .kpi-value {
+      font-size: 18px;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .chart-card {
+      background: #f9fafb;
+      border-radius: 8px;
+      padding: 12px 12px 16px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .chart-card h3 {
+      margin: 0 0 4px;
+      font-size: 14px;
+    }
+
+    .chart-card p {
+      margin: 0 0 6px;
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    canvas {
+      max-width: 100%;
+    }
+
+    .insight-list {
+      font-size: 13px;
+      padding-left: 18px;
+    }
+
+    .insight-list li {
+      margin-bottom: 4px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 6px;
+      font-size: 11px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin-left: 6px;
+    }
+
+    @media (max-width: 768px) {
+      header {
         flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
       }
-      #bookname{
-        flex-basis:100%
-      }
-      #bookurl{
-        flex-basis:100%
-      }
-      #bookdescription{
-        flex-basis: 100%;
-      }
-      #bookList{
-        flex-direction: column;
-      }
-      .book {
-        flex-basis: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;   
-        align-items: center;    
-      }
-      .book img {
-        float: none;
-      }
-      }
-    </style>
-  </head>
 
-  <body>
-    <!-- HTML 部分 -->
-    <h1>我的軟體開發技術書籍收藏</h1>
-    <p>主要收藏Web programming與Software engineering相關書籍</p>
+      main {
+        padding: 12px 16px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>公車營運資料儀表板</h1>
+    <small>上傳 Excel → 自動分析隱藏需求與尖峰班表</small>
+  </div>
+  <div>
+    <small>前端純 HTML / CSS / JS，可部署到 GitHub Pages</small>
+  </div>
+</header>
 
-    <!-- 使用者輸入 -->
-     <div class="inputform">
-        <input type="text" placeholder="輸入書籍名稱" id="bookname">
-        <input type="text" placeholder="輸入書籍連結" id="bookurl">
-        <input type="text" placeholder="輸入書籍描述" id="bookdescription">
+<main>
+  <!-- 區塊一：上傳與篩選 -->
+  <section class="section">
+    <h2>資料上傳與篩選</h2>
+    <p>請上傳包含欄位「營運日期、開班時間、路線、去返、上車時間、上車站、下車站、卡號、旅次」等的 .xlsx 檔案。</p>
+
+    <div class="upload-row" style="margin-top: 8px;">
+      <div>
+        <input type="file" id="fileInput" accept=".xlsx,.xls" />
+      </div>
+      <div>
+        路線：
+        <select id="routeFilter">
+          <option value="">全部路線</option>
+        </select>
+      </div>
+      <div>
+        去返：
+        <select id="dirFilter">
+          <option value="">全部</option>
+        </select>
+      </div>
+      <div>
+        日期區間：
+        <input type="date" id="startDate" /> ~
+        <input type="date" id="endDate" />
+      </div>
+      <div>
+        <button id="applyFilter" disabled>套用篩選與重算分析</button>
+      </div>
     </div>
-    <div class="btn">
-        <button id="addButton">新增書籍</button>
-    </div>
-    <hr />
 
-    <div id="bookList">    <!-- JavaScript -->
-    <script>
-      let bookArray = [
-        `<div class="book">
-                <img src="https://picsum.photos/150/150" alt="書籍封面">
-                <div class="book-title">《JavaScript: The Good Parts》</div>
-                <div class="book-url"><a href="https://example.com/js-good-parts" target="_blank">書籍連結</a></div>
-                <div class="book-description">由Douglas Crockford撰寫，是深入理解JavaScript精髓的經典書籍。</div>
-            </div>`,
-        `<div class="book">
-                <img src="https://picsum.photos/150/150" alt="書籍封面">
-                <div class="book-title">《Clean Code》</div>
-                <div class="book-url"><a href="https://example.com/clean-code" target="_blank">書籍連結</a></div>
-                <div class="book-description">Robert C. Martin所著，介紹如何撰寫可維護且清晰的程式碼。</div>
-            </div>`,
-      ];
-      document
-        .getElementById("addButton")
-        .addEventListener("click", addBook, false);
-      function addBook() {
-        let name=document.getElementById("bookname").value;
-        let url=document.getElementById("bookurl").value;
-        let description=document.getElementById("bookdescription").value;
-        if(name=="" || url=="" || description==""){
-          alert("請完整輸入書籍資訊");
-          return;
+    <p style="margin-top: 10px; font-size: 12px; color:#6b7280;">
+      註：所有運算都在瀏覽器本機執行，不會上傳到伺服器。
+    </p>
+  </section>
+
+  <!-- 區塊二：整體 KPI -->
+  <section class="section">
+    <h2>整體概況 KPI</h2>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-title">總旅次數（搭乘筆數）</div>
+        <div class="kpi-value" id="kpiTotalTrips">-</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">常客數量（卡號）</div>
+        <div class="kpi-value" id="kpiFrequentRiders">-</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">預估潛在流失天數</div>
+        <div class="kpi-value" id="kpiMissingDays">-</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">平均常客留存率（估計自家搭乘機率）</div>
+        <div class="kpi-value" id="kpiAvgCaptureRate">-</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">平均發車準點差（分鐘）</div>
+        <div class="kpi-value" id="kpiAvgDelay">-</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">尖峰時段最大站點需求（人次 / 小時）</div>
+        <div class="kpi-value" id="kpiPeakDemand">-</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 區塊三：分析重點一：隱藏需求與流失客源 -->
+  <section class="section">
+    <h2>分析重點一：挖掘隱藏需求與流失客源</h2>
+    <p>
+      以 <strong>卡號（個體乘客）</strong> 為單位，分析常客在整個觀察期間內的「應出現天數 vs. 實際搭乘天數」，估計隱藏需求與可能被競爭對手載走的客源。
+    </p>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <h3>常客留存率分布 <span class="badge">個體視角</span></h3>
+        <p>顯示常客（多日搭乘卡號）在觀察期間內的留存率（實際搭乘天數 / 涵蓋天數）。</p>
+        <canvas id="chartCaptureRate"></canvas>
+      </div>
+
+      <div class="chart-card">
+        <h3>常客乘車型態分類</h3>
+        <p>依主要乘車時段將常客分為「早尖峰型、晚尖峰型、通勤型、零散型」，並估計各群體的平均留存率。</p>
+        <canvas id="chartRiderSegments"></canvas>
+      </div>
+
+      <div class="chart-card">
+        <h3>高價值常客缺口排行</h3>
+        <p>顯示旅次最多的常客中，預估缺少的搭乘天數（可視為潛在隱藏需求）。</p>
+        <canvas id="chartTopMissing"></canvas>
+      </div>
+    </div>
+
+    <ul class="insight-list" id="insightHiddenDemand">
+      <!-- 由 JS 產生文字洞察 -->
+    </ul>
+  </section>
+
+  <!-- 區塊四：分析重點二：固定班表排程與尖峰需求優化 -->
+  <section class="section">
+    <h2>分析重點二：固定班表排程與尖峰需求優化</h2>
+    <p>
+      以 <strong>開班時間、站點、上車時間</strong> 為主，觀察不同時間帶的乘載需求、尖峰站點，以及發車準點性。
+    </p>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <h3>各時段總需求曲線</h3>
+        <p>按上車時間（小時）統計總人次，找出尖峰時段與離峰潛力。</p>
+        <canvas id="chartHourlyDemand"></canvas>
+      </div>
+
+      <div class="chart-card">
+        <h3>上車站點需求排行</h3>
+        <p>計算各上車站的總上車人次，顯示需求最高的前幾個站點。</p>
+        <canvas id="chartTopStops"></canvas>
+      </div>
+
+      <div class="chart-card">
+        <h3>班次發車準點性</h3>
+        <p>以班次為單位，比較表定開班時間與實際第一位乘客上車時間的差異。</p>
+        <canvas id="chartDelay"></canvas>
+      </div>
+    </div>
+
+    <ul class="insight-list" id="insightSchedule">
+      <!-- 由 JS 產生文字洞察 -->
+    </ul>
+  </section>
+</main>
+
+<script>
+  // ====== 全域狀態 ======
+  let rawRecords = [];       // 由 Excel 讀出的原始資料 (sheet_to_json)
+  let normRecords = [];      // 正規化後的紀錄
+  let filteredRecords = [];  // 套用篩選後的紀錄
+
+  // Chart 物件（避免重複建立）
+  let chartCaptureRate, chartRiderSegments, chartTopMissing;
+  let chartHourlyDemand, chartTopStops, chartDelay;
+
+  // 常客判定：至少多少天有搭車才算常客
+  const FREQUENT_MIN_DAYS = 5;
+
+  // ====== 公用工具函式 ======
+
+  // 將「YYYY/MM/DD 或 YYYY-MM-DD」轉為 Date 物件
+  function parseDate(value) {
+    if (!value) return null;
+    if (value instanceof Date) return value;
+    const str = String(value).trim();
+    if (!str) return null;
+    // 統一分隔符
+    const s = str.replace(/\./g, "/").replace(/-/g, "/");
+    const parts = s.split("/");
+    if (parts.length < 3) return null;
+    const y = parseInt(parts[0], 10);
+    const m = parseInt(parts[1], 10);
+    const d = parseInt(parts[2], 10);
+    if (!y || !m || !d) return null;
+    return new Date(y, m - 1, d);
+  }
+
+  // 將「HH:mm」或「HH:mm:ss」轉為從 0:00 起算的分鐘數
+  function parseTimeToMinutes(value) {
+    if (!value) return null;
+    const str = String(value).trim();
+    if (!str) return null;
+    const parts = str.split(":");
+    if (parts.length < 2) return null;
+    const h = parseInt(parts[0], 10);
+    const m = parseInt(parts[1], 10);
+    if (isNaN(h) || isNaN(m)) return null;
+    return h * 60 + m;
+  }
+
+  // 兩個日期相差天數（含首尾 → +1）
+  function diffDaysInclusive(d1, d2) {
+    const t1 = Date.UTC(d1.getFullYear(), d1.getMonth(), d1.getDate());
+    const t2 = Date.UTC(d2.getFullYear(), d2.getMonth(), d2.getDate());
+    return Math.floor((t2 - t1) / (1000 * 60 * 60 * 24)) + 1;
+  }
+
+  // 格式化數字（千分位）
+  function fmtInt(n) {
+    if (n == null || isNaN(n)) return "-";
+    return Math.round(n).toLocaleString();
+  }
+
+  // 格式化百分比
+  function fmtPct(v) {
+    if (v == null || isNaN(v)) return "-";
+    return (v * 100).toFixed(1) + "%";
+  }
+
+  // 格式化小數
+  function fmtFloat(v, digits = 1) {
+    if (v == null || isNaN(v)) return "-";
+    return v.toFixed(digits);
+  }
+
+  // ====== 讀取 Excel ======
+  document.getElementById("fileInput").addEventListener("change", function (e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (event) {
+      const data = new Uint8Array(event.target.result);
+      const workbook = XLSX.read(data, { type: "array" });
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+
+      // 將第一列作為欄位名稱
+      rawRecords = XLSX.utils.sheet_to_json(sheet, { defval: null });
+      console.log("Raw rows:", rawRecords.length);
+
+      normalizeRecords();
+      initFilters();
+      applyFilterAndAnalyze();
+
+      document.getElementById("applyFilter").disabled = false;
+    };
+    reader.readAsArrayBuffer(file);
+  });
+
+  // 根據題目欄位將 rawRecords 正規化
+  function normalizeRecords() {
+    normRecords = rawRecords.map(r => {
+      const date = parseDate(r["營運日期"]);
+      return {
+        raw: r,
+        date,
+        dateStr: date ? date.toISOString().slice(0, 10) : null,
+        route: r["路線"] != null ? String(r["路線"]) : "",
+        direction: r["去返"] != null ? String(r["去返"]) : "",
+        stationFrom: r["上車站"] != null ? String(r["上車站"]) : "",
+        stationTo: r["下車站"] != null ? String(r["下車站"]) : "",
+        stopSeqFrom: r["上車站序"] != null ? Number(r["上車站序"]) : null,
+        stopSeqTo: r["下車站序"] != null ? Number(r["下車站序"]) : null,
+        tripId: r["旅次"] != null ? String(r["旅次"]) : "",
+        cardId: r["卡號"] != null ? String(r["卡號"]) : "",
+        boardTimeMin: parseTimeToMinutes(r["上車時間"]),
+        alightTimeMin: parseTimeToMinutes(r["下車時間"]),
+        schedDepMin: parseTimeToMinutes(r["開班時間"]),
+      };
+    });
+
+    console.log("Normalized records:", normRecords.length);
+  }
+
+  // 初始化路線、去返、日期篩選選單
+  function initFilters() {
+    const routeSet = new Set();
+    const dirSet = new Set();
+    let minDate = null;
+    let maxDate = null;
+
+    normRecords.forEach(rec => {
+      if (rec.route) routeSet.add(rec.route);
+      if (rec.direction) dirSet.add(rec.direction);
+      if (rec.date) {
+        if (!minDate || rec.date < minDate) minDate = rec.date;
+        if (!maxDate || rec.date > maxDate) maxDate = rec.date;
+      }
+    });
+
+    const routeSel = document.getElementById("routeFilter");
+    routeSel.innerHTML = '<option value="">全部路線</option>';
+    Array.from(routeSet).sort().forEach(r => {
+      const opt = document.createElement("option");
+      opt.value = r;
+      opt.textContent = r;
+      routeSel.appendChild(opt);
+    });
+
+    const dirSel = document.getElementById("dirFilter");
+    dirSel.innerHTML = '<option value="">全部</option>';
+    Array.from(dirSet).sort().forEach(d => {
+      const opt = document.createElement("option");
+      opt.value = d;
+      opt.textContent = d;
+      dirSel.appendChild(opt);
+    });
+
+    if (minDate && maxDate) {
+      document.getElementById("startDate").value = minDate
+        .toISOString()
+        .slice(0, 10);
+      document.getElementById("endDate").value = maxDate
+        .toISOString()
+        .slice(0, 10);
+    }
+  }
+
+  document
+    .getElementById("applyFilter")
+    .addEventListener("click", applyFilterAndAnalyze);
+
+  function applyFilterAndAnalyze() {
+    const route = document.getElementById("routeFilter").value;
+    const dir = document.getElementById("dirFilter").value;
+    const startDateStr = document.getElementById("startDate").value;
+    const endDateStr = document.getElementById("endDate").value;
+
+    const startDate = startDateStr ? new Date(startDateStr) : null;
+    const endDate = endDateStr ? new Date(endDateStr) : null;
+
+    filteredRecords = normRecords.filter(rec => {
+      if (route && rec.route !== route) return false;
+      if (dir && rec.direction !== dir) return false;
+      if (startDate && rec.date && rec.date < startDate) return false;
+      if (endDate && rec.date && rec.date > endDate) return false;
+      return true;
+    });
+
+    console.log("Filtered:", filteredRecords.length);
+    runAnalysis();
+  }
+
+  // ====== 主分析流程 ======
+  function runAnalysis() {
+    // 基本統計
+    updateKpis();
+
+    // 隱藏需求與流失客源
+    const frequentStats = analyzeFrequentRiders();
+    renderHiddenDemandCharts(frequentStats);
+    renderHiddenDemandInsights(frequentStats);
+
+    // 班表與尖峰需求
+    const scheduleStats = analyzeScheduleAndDemand();
+    renderScheduleCharts(scheduleStats);
+    renderScheduleInsights(scheduleStats);
+  }
+
+  // 更新 KPI 區塊
+  function updateKpis() {
+    const kTotalTrips = document.getElementById("kpiTotalTrips");
+    kTotalTrips.textContent = fmtInt(filteredRecords.length);
+
+    // 常客分析結果會在後面補
+    document.getElementById("kpiFrequentRiders").textContent = "-";
+    document.getElementById("kpiMissingDays").textContent = "-";
+    document.getElementById("kpiAvgCaptureRate").textContent = "-";
+    document.getElementById("kpiAvgDelay").textContent = "-";
+    document.getElementById("kpiPeakDemand").textContent = "-";
+  }
+
+  // ====== 分析重點一：常客與隱藏需求 ======
+  function analyzeFrequentRiders() {
+    const byCard = new Map();
+
+    filteredRecords.forEach(rec => {
+      if (!rec.cardId || !rec.date) return;
+      if (!byCard.has(rec.cardId)) {
+        byCard.set(rec.cardId, {
+          cardId: rec.cardId,
+          trips: 0,
+          dates: new Set(),
+          timeBands: { morning: 0, evening: 0, offpeak: 0 },
+        });
+      }
+      const obj = byCard.get(rec.cardId);
+      obj.trips += 1;
+      obj.dates.add(rec.dateStr);
+
+      // 時段分類：早尖峰 06-10, 晚尖峰 17-21, 其他
+      const t = rec.boardTimeMin;
+      if (t != null) {
+        const hour = Math.floor(t / 60);
+        if (hour >= 6 && hour < 10) obj.timeBands.morning++;
+        else if (hour >= 17 && hour < 21) obj.timeBands.evening++;
+        else obj.timeBands.offpeak++;
+      }
+    });
+
+    const riders = [];
+    byCard.forEach(obj => {
+      if (obj.dates.size === 0) return;
+      // 用最小與最大日期估出潛在涵蓋天數
+      const datesArr = Array.from(obj.dates)
+        .map(s => new Date(s))
+        .sort((a, b) => a - b);
+      const spanDays = diffDaysInclusive(datesArr[0], datesArr[datesArr.length - 1]);
+      const activeDays = obj.dates.size;
+      const missingDays = Math.max(0, spanDays - activeDays);
+      const captureRate =
+        spanDays > 0 ? activeDays / spanDays : 1.0;
+
+      // 常客與類型標籤
+      const totalBand =
+        obj.timeBands.morning + obj.timeBands.evening + obj.timeBands.offpeak;
+      let seg = "零散型";
+      if (totalBand > 0) {
+        const mShare = obj.timeBands.morning / totalBand;
+        const eShare = obj.timeBands.evening / totalBand;
+        if (mShare > 0.6 && eShare < 0.3) seg = "早尖峰型";
+        else if (eShare > 0.6 && mShare < 0.3) seg = "晚尖峰型";
+        else if (mShare > 0.3 && eShare > 0.3) seg = "通勤型";
+      }
+
+      riders.push({
+        cardId: obj.cardId,
+        trips: obj.trips,
+        activeDays,
+        spanDays,
+        missingDays,
+        captureRate,
+        segment: seg,
+      });
+    });
+
+    // 常客：至少 FREQUENT_MIN_DAYS 天有搭車
+    const frequent = riders.filter(r => r.activeDays >= FREQUENT_MIN_DAYS);
+
+    // KPI
+    const totalMissingDays = frequent.reduce(
+      (acc, r) => acc + r.missingDays,
+      0
+    );
+    const avgCapture =
+      frequent.length > 0
+        ? frequent.reduce((acc, r) => acc + r.captureRate, 0) /
+          frequent.length
+        : null;
+
+    document.getElementById("kpiFrequentRiders").textContent =
+      fmtInt(frequent.length);
+    document.getElementById("kpiMissingDays").textContent =
+      fmtInt(totalMissingDays);
+    document.getElementById("kpiAvgCaptureRate").textContent =
+      avgCapture != null ? fmtPct(avgCapture) : "-";
+
+    return { riders, frequent, totalMissingDays, avgCapture };
+  }
+
+  // 繪製常客相關圖表
+  function renderHiddenDemandCharts(stats) {
+    const { frequent } = stats;
+
+    // 1) 留存率分布直方圖
+    const buckets = [
+      "0-20%",
+      "20-40%",
+      "40-60%",
+      "60-80%",
+      "80-100%",
+    ];
+    const bucketCounts = [0, 0, 0, 0, 0];
+
+    frequent.forEach(r => {
+      const cr = r.captureRate;
+      if (cr < 0.2) bucketCounts[0] += 1;
+      else if (cr < 0.4) bucketCounts[1] += 1;
+      else if (cr < 0.6) bucketCounts[2] += 1;
+      else if (cr < 0.8) bucketCounts[3] += 1;
+      else bucketCounts[4] += 1;
+    });
+
+    const ctx1 = document.getElementById("chartCaptureRate");
+    if (chartCaptureRate) chartCaptureRate.destroy();
+    chartCaptureRate = new Chart(ctx1, {
+      type: "bar",
+      data: {
+        labels: buckets,
+        datasets: [
+          {
+            label: "常客數量",
+            data: bucketCounts,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: { precision: 0 },
+          },
+        },
+      },
+    });
+
+    // 2) 乘車型態分群 + 各群平均留存率
+    const segGroups = {};
+    frequent.forEach(r => {
+      if (!segGroups[r.segment]) {
+        segGroups[r.segment] = { count: 0, totalCR: 0 };
+      }
+      segGroups[r.segment].count += 1;
+      segGroups[r.segment].totalCR += r.captureRate;
+    });
+    const segLabels = Object.keys(segGroups);
+    const segAvgCR = segLabels.map(
+      s => segGroups[s].totalCR / segGroups[s].count
+    );
+
+    const ctx2 = document.getElementById("chartRiderSegments");
+    if (chartRiderSegments) chartRiderSegments.destroy();
+    chartRiderSegments = new Chart(ctx2, {
+      type: "bar",
+      data: {
+        labels: segLabels,
+        datasets: [
+          {
+            label: "平均留存率",
+            data: segAvgCR,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            min: 0,
+            max: 1,
+            ticks: {
+              callback: v => (v * 100).toFixed(0) + "%",
+            },
+          },
+        },
+      },
+    });
+
+    // 3) 高價值常客缺口排行（依旅次排序取前 15 名）
+    const topMissing = [...frequent]
+      .sort((a, b) => b.trips - a.trips)
+      .slice(0, 15);
+
+    const ctx3 = document.getElementById("chartTopMissing");
+    if (chartTopMissing) chartTopMissing.destroy();
+    chartTopMissing = new Chart(ctx3, {
+      type: "bar",
+      data: {
+        labels: topMissing.map(r =>
+          r.cardId.length > 8 ? r.cardId.slice(-8) : r.cardId
+        ),
+        datasets: [
+          {
+            label: "缺少天數",
+            data: topMissing.map(r => r.missingDays),
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: { precision: 0 },
+          },
+        },
+      },
+    });
+  }
+
+  function renderHiddenDemandInsights(stats) {
+    const ul = document.getElementById("insightHiddenDemand");
+    ul.innerHTML = "";
+
+    const { frequent, totalMissingDays, avgCapture } = stats;
+    if (frequent.length === 0) {
+      ul.innerHTML =
+        "<li>目前篩選條件下，沒有符合常客判定（至少 " +
+        FREQUENT_MIN_DAYS +
+        " 天有搭乘）的卡號。</li>";
+      return;
+    }
+
+    const lowCR = frequent.filter(r => r.captureRate < 0.6).length;
+    const heavyRiders = frequent.filter(r => r.trips >= 50).length;
+
+    const li1 = document.createElement("li");
+    li1.textContent =
+      "常客共 " +
+      fmtInt(frequent.length) +
+      " 人，平均留存率約 " +
+      (avgCapture != null ? fmtPct(avgCapture) : "-") +
+      "。估計在觀察期間內，總共有 " +
+      fmtInt(totalMissingDays) +
+      " 個「可能未搭乘本業者」的日子，可視為隱藏需求。";
+    ul.appendChild(li1);
+
+    const li2 = document.createElement("li");
+    li2.textContent =
+      "其中約有 " +
+      fmtInt(lowCR) +
+      " 名常客留存率低於 60%，可能是被競爭對手或其他運具分食的關鍵族群，適合針對性促銷或服務優化。";
+    ul.appendChild(li2);
+
+    const li3 = document.createElement("li");
+    li3.textContent =
+      "高旅次常客（旅次 ≥ 50）約 " +
+      fmtInt(heavyRiders) +
+      " 人，他們對總運量貢獻度高，若再次出現流失訊號（連續多天未搭乘），可視為重要預警指標。";
+    ul.appendChild(li3);
+  }
+
+  // ====== 分析重點二：班表與尖峰需求 ======
+  function analyzeScheduleAndDemand() {
+    const hourlyDemand = new Array(24).fill(0);
+    const stopDemand = {}; // 上車站 -> 人次
+
+    // 班次（旅次）準點：用 date + route + direction + tripId 當 key
+    const tripMap = new Map();
+
+    filteredRecords.forEach(rec => {
+      if (rec.boardTimeMin != null) {
+        const hour = Math.floor(rec.boardTimeMin / 60);
+        if (hour >= 0 && hour < 24) hourlyDemand[hour]++;
+
+        if (rec.stationFrom) {
+          stopDemand[rec.stationFrom] =
+            (stopDemand[rec.stationFrom] || 0) + 1;
         }
-        let newbook=`<div class="book">
-                <img src="https://picsum.photos/150/150" alt="書籍封面">
-                <div class="book-title">${name}</div>
-                <div class="book-url"><a href="${url}" target="_blank">書籍連結</a></div>
-                <div class="book-description">${description}</div>
-            </div>`;
-        bookArray.push(newbook);
-        document.getElementById("bookList").innerHTML = bookArray.join(" ");
       }
-    </script>
-  </body>
+
+      if (!rec.dateStr || !rec.route || !rec.tripId) return;
+      const key =
+        rec.dateStr + "|" + rec.route + "|" + rec.direction + "|" + rec.tripId;
+      if (!tripMap.has(key)) {
+        tripMap.set(key, {
+          schedDepMin: rec.schedDepMin,
+          firstBoardMin: rec.boardTimeMin,
+        });
+      } else {
+        const obj = tripMap.get(key);
+        if (
+          rec.boardTimeMin != null &&
+          (obj.firstBoardMin == null ||
+            rec.boardTimeMin < obj.firstBoardMin)
+        ) {
+          obj.firstBoardMin = rec.boardTimeMin;
+        }
+        if (obj.schedDepMin == null && rec.schedDepMin != null) {
+          obj.schedDepMin = rec.schedDepMin;
+        }
+      }
+    });
+
+    const delays = [];
+    tripMap.forEach(trip => {
+      if (
+        trip.schedDepMin != null &&
+        trip.firstBoardMin != null
+      ) {
+        const delay = trip.firstBoardMin - trip.schedDepMin;
+        // 正值：晚發；負值：早於排點
+        delays.push(delay);
+      }
+    });
+
+    const avgDelay =
+      delays.length > 0
+        ? delays.reduce((a, b) => a + b, 0) / delays.length
+        : null;
+
+    // 尖峰站點需求：找出小時 x 站點的最高 demand (粗略)
+    const hourlyStopDemand = {}; // key: station|hour
+    filteredRecords.forEach(rec => {
+      if (!rec.stationFrom || rec.boardTimeMin == null) return;
+      const hour = Math.floor(rec.boardTimeMin / 60);
+      const key = rec.stationFrom + "|" + hour;
+      hourlyStopDemand[key] = (hourlyStopDemand[key] || 0) + 1;
+    });
+
+    let maxDemand = 0;
+    let maxKey = null;
+    Object.entries(hourlyStopDemand).forEach(([k, v]) => {
+      if (v > maxDemand) {
+        maxDemand = v;
+        maxKey = k;
+      }
+    });
+
+    const peakInfo = { maxDemand, maxKey };
+
+    // 更新 KPI
+    document.getElementById("kpiAvgDelay").textContent =
+      avgDelay != null ? fmtFloat(avgDelay, 1) : "-";
+    document.getElementById("kpiPeakDemand").textContent =
+      maxDemand > 0 ? fmtInt(maxDemand) : "-";
+
+    return {
+      hourlyDemand,
+      stopDemand,
+      delays,
+      avgDelay,
+      peakInfo,
+    };
+  }
+
+  function renderScheduleCharts(stats) {
+    const { hourlyDemand, stopDemand, delays } = stats;
+
+    // 1) 各時段需求曲線
+    const labelsHour = Array.from({ length: 24 }, (_, i) => i + ":00");
+    const ctx1 = document.getElementById("chartHourlyDemand");
+    if (chartHourlyDemand) chartHourlyDemand.destroy();
+    chartHourlyDemand = new Chart(ctx1, {
+      type: "line",
+      data: {
+        labels: labelsHour,
+        datasets: [
+          {
+            label: "上車人次",
+            data: hourlyDemand,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true },
+        },
+      },
+    });
+
+    // 2) 上車站點需求排行（取前 10 大）
+    const stopArr = Object.entries(stopDemand).sort((a, b) => b[1] - a[1]);
+    const topStops = stopArr.slice(0, 10);
+    const ctx2 = document.getElementById("chartTopStops");
+    if (chartTopStops) chartTopStops.destroy();
+    chartTopStops = new Chart(ctx2, {
+      type: "bar",
+      data: {
+        labels: topStops.map(x => x[0]),
+        datasets: [
+          {
+            label: "上車人次",
+            data: topStops.map(x => x[1]),
+          },
+        ],
+      },
+      options: {
+        indexAxis: "y",
+        responsive: true,
+        scales: {
+          x: { beginAtZero: true },
+        },
+      },
+    });
+
+    // 3) 班次發車準點分布（delay 直方圖）
+    // 將 delay 以 5 分鐘為一格
+    const bucketMap = new Map();
+    delays.forEach(d => {
+      const bucket = Math.round(d / 5) * 5; // 四捨五入到 5 分鐘
+      bucketMap.set(bucket, (bucketMap.get(bucket) || 0) + 1);
+    });
+    const delayBuckets = Array.from(bucketMap.keys()).sort((a, b) => a - b);
+    const delayCounts = delayBuckets.map(k => bucketMap.get(k));
+
+    const ctx3 = document.getElementById("chartDelay");
+    if (chartDelay) chartDelay.destroy();
+    chartDelay = new Chart(ctx3, {
+      type: "bar",
+      data: {
+        labels: delayBuckets.map(k => k + " 分"),
+        datasets: [
+          {
+            label: "班次數",
+            data: delayCounts,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true, ticks: { precision: 0 } },
+        },
+      },
+    });
+  }
+
+  function renderScheduleInsights(stats) {
+    const ul = document.getElementById("insightSchedule");
+    ul.innerHTML = "";
+    const { hourlyDemand, avgDelay, peakInfo } = stats;
+
+    const total = hourlyDemand.reduce((a, b) => a + b, 0);
+    if (total === 0) {
+      ul.innerHTML =
+        "<li>目前篩選條件下沒有任何搭乘資料，無法進行班表與尖峰需求分析。</li>";
+      return;
+    }
+
+    // 找出需求最高的小時區間
+    let maxHour = 0;
+    let maxVal = 0;
+    hourlyDemand.forEach((v, i) => {
+      if (v > maxVal) {
+        maxVal = v;
+        maxHour = i;
+      }
+    });
+
+    const li1 = document.createElement("li");
+    li1.textContent =
+      "目前資料中，需求最高的時段約為「" +
+      maxHour +
+      ":00 - " +
+      (maxHour + 1) +
+      ":00」，人次約 " +
+      fmtInt(maxVal) +
+      "。此時段應視為主要尖峰時段，建議優先配置班次。";
+    ul.appendChild(li1);
+
+    const li2 = document.createElement("li");
+    const amPeak =
+      hourlyDemand.slice(6, 10).reduce((a, b) => a + b, 0);
+    const pmPeak =
+      hourlyDemand.slice(17, 21).reduce((a, b) => a + b, 0);
+    const mid = hourlyDemand.slice(10, 17).reduce((a, b) => a + b, 0);
+
+    li2.textContent =
+      "從時段分布來看，早尖峰 (06-10) 約佔 " +
+      fmtPct(amPeak / total) +
+      "，晚尖峰 (17-21) 約佔 " +
+      fmtPct(pmPeak / total) +
+      "，中間時段 (10-17) 仍有約 " +
+      fmtPct(mid / total) +
+      " 的客量，可以評估是否在其中一兩個小時投入彈性加班，作為「被誤認為離峰」的潛力時段。";
+    ul.appendChild(li2);
+
+    if (avgDelay != null) {
+      const li3 = document.createElement("li");
+      li3.textContent =
+        "班次平均開車時間與表定班表相差約 " +
+        fmtFloat(avgDelay, 1) +
+        " 分鐘（正值代表普遍晚發車）。如平均延遲偏大，可能導致尖峰轉乘失敗、客流外移。";
+      ul.appendChild(li3);
+    }
+
+    if (peakInfo && peakInfo.maxKey) {
+      const [station, hourStr] = peakInfo.maxKey.split("|");
+      const hour = parseInt(hourStr, 10);
+      const li4 = document.createElement("li");
+      li4.textContent =
+        "在站點「" +
+        station +
+        "」於「" +
+        hour +
+        ":00 - " +
+        (hour + 1) +
+        ":00」內，上車人次高達約 " +
+        fmtInt(peakInfo.maxDemand) +
+        " 人，是明確的高壓站點時段。建議從頭站往回推約 20~30 分鐘規劃密集發車，以承接此波需求。";
+      ul.appendChild(li4);
+    }
+  }
+</script>
+</body>
 </html>
