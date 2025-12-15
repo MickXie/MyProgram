@@ -1,0 +1,63 @@
+.wrapper {
+  text-align: center;
+  padding: 20px;
+  font-family: sans-serif;
+}
+
+.scoreboard {
+  margin-top: 20px;
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+}
+
+.team {
+  width: 180px;
+  height: 180px;
+  font-size: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: white;
+  border-radius: 8px;
+  user-select: none;
+}
+
+.red {
+  background: #e53935;
+}
+
+.blue {
+  background: #0d47a1;
+}
+
+.winner {
+  margin-top: 20px;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.reset {
+  margin-top: 16px;
+  padding: 10px 20px;
+  font-size: 16px;
+}
+.result-box {
+  border: 3px solid #333;
+  padding: 20px;
+  font-size: 22px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.fact-text {
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.reload-btn {
+  padding: 8px 18px;
+  font-size: 16px;
+  cursor: pointer;
+}
