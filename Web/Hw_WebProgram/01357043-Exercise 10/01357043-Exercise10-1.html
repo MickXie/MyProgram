@@ -17,9 +17,7 @@
     </div>
 
     <div class="container-fluid">
-      <div class="row" id="newsContainer">
-        <!-- JS will fill news here -->
-      </div>
+      <div class="row" id="newsContainer"></div>
     </div>
 
     <script>
@@ -31,7 +29,7 @@
           const response = await fetch(apiURL);
           const news = await response.json();
 
-          container.innerHTML = ""; // 清空舊的內容
+          container.innerHTML = "";
 
           news.forEach((item) => {
             const title = item.title || "無標題";
