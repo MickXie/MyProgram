@@ -22,7 +22,7 @@ void insert(int x)
         i /= 2;
     }
 }
-int deleteMax(void)
+int deleteMax()
 {
     if (heapSize == 0)
         return -1;
@@ -51,7 +51,7 @@ int deleteMax(void)
     return maxVal;
 }
 
-int main(void)
+int main()
 {
     char line[10000];
     if (fgets(line, sizeof(line), stdin) != NULL)

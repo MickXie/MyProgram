@@ -1,67 +1,54 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-#define MAX 1000
+#include <string.h>
 
 typedef struct Node
 {
-    int key;
-    struct Node *left;
-    struct Node *right;
+    int val;
+    struct Node *left, *right;
 } Node;
 
-Node *newNode(int key)
+Node *build(int arr[], int i, int n)
 {
-    Node *temp = (Node *)malloc(sizeof(Node));
-    temp->key = key;
-    temp->left = temp->right = NULL;
-    return temp;
-}
-Node *buildTree(int arr[], int n, int index)
-{
-    if (index >= n || arr[index] == -1)
+    if (i >= n || arr[i] == -1)
         return NULL;
 
-    Node *root = newNode(arr[index]);
-    root->left = buildTree(arr, n, 2 * index + 1);
-    root->right = buildTree(arr, n, 2 * index + 2);
+    Node *root = (Node *)malloc(sizeof(Node));
+    root->val = arr[i];
+    root->left = build(arr, 2 * i + 1, n);
+    root->right = build(arr, 2 * i + 2, n);
     return root;
 }
-Node *LCA(Node *root, int u, int v)
+
+int LCA(Node *root, int u, int v)
 {
     if (!root)
-        return NULL;
+        return -1;
 
-    if (u < root->key && v < root->key)
+    if (u < root->val && v < root->val)
         return LCA(root->left, u, v);
-
-    if (u > root->key && v > root->key)
+    else if (u > root->val && v > root->val)
         return LCA(root->right, u, v);
-
-    return root;
+    else
+        return root->val;
 }
 
-int main()
+int main(void)
 {
-    int arr[MAX];
+    int arr[100];
     int n = 0;
-    while (scanf("%d", &arr[n]) == 1)
+    char line[1024];
+    if (fgets(line, sizeof(line), stdin) == NULL)
+        return 0;
+    char *p = strtok(line, " \t\r\n");
+    while (p != NULL)
     {
-        n++;
-        if (getchar() == '\n')
-            break;
+        arr[n++] = atoi(p);
+        p = strtok(NULL, " \t\r\n");
     }
-
     int u, v;
     scanf("%d %d", &u, &v);
-
-    Node *root = buildTree(arr, n, 0);
-    Node *lca = LCA(root, u, v);
-
-    if (lca)
-        printf("%d\n", lca->key);
-    else
-        printf("No LCA Found\n");
-
+    Node *root = build(arr, 0, n);
+    printf("%d\n", LCA(root, u, v));
     return 0;
 }

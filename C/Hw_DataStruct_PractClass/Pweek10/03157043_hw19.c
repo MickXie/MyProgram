@@ -1,84 +1,89 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-typedef struct Node
+typedef struct node
 {
     int key;
-    struct Node *left, *right;
+    struct node *left;
+    struct node *right;
 } Node;
 
-Node *newNode(int key)
-{
-    Node *n = (Node *)malloc(sizeof(Node));
-    n->key = key;
-    n->left = n->right = NULL;
-    return n;
-}
+Node *root = NULL;
+
 Node *modifiedSearch(Node *root, int key)
 {
     Node *parent = NULL;
-    Node *cur = root;
+    Node *curr = root;
 
-    while (cur != NULL)
+    while (curr != NULL)
     {
-        parent = cur;
-
-        if (key == cur->key)
-            return NULL;
-        else if (key < cur->key)
-            cur = cur->left;
+        if (key == curr->key)
+            return curr;
+        parent = curr;
+        if (key < curr->key)
+            curr = curr->left;
         else
-            cur = cur->right;
+            curr = curr->right;
     }
     return parent;
 }
-Node *insert(Node *root, int key)
+
+void insert(int key)
 {
+    Node *parent = modifiedSearch(root, key);
+
     if (root == NULL)
-        return newNode(key);
+    {
+        root = (Node *)malloc(sizeof(Node));
+        root->key = key;
+        root->left = root->right = NULL;
+        return;
+    }
 
-    Node *p = modifiedSearch(root, key);
-    if (p == NULL)
-        return root;
+    if (parent->key == key)
+        return;
 
-    if (key < p->key)
-        p->left = newNode(key);
+    Node *newNode = (Node *)malloc(sizeof(Node));
+    newNode->key = key;
+    newNode->left = newNode->right = NULL;
+
+    if (key < parent->key)
+        parent->left = newNode;
     else
-        p->right = newNode(key);
-
-    return root;
-}
-void inorder(Node *root)
-{
-    if (!root)
-        return;
-    inorder(root->left);
-    printf("%d ", root->key);
-    inorder(root->right);
-}
-void preorder(Node *root)
-{
-    if (!root)
-        return;
-    printf("%d ", root->key);
-    preorder(root->left);
-    preorder(root->right);
+        parent->right = newNode;
 }
 
-int main()
+void inorder(Node *node)
 {
-    int n;
+    if (node == NULL)
+        return;
+    inorder(node->left);
+    printf("%d ", node->key);
+    inorder(node->right);
+}
+
+void preorder(Node *node)
+{
+    if (node == NULL)
+        return;
+    printf("%d ", node->key);
+    preorder(node->left);
+    preorder(node->right);
+}
+
+int main(void)
+{
+    int n, x;
+
     scanf("%d", &n);
-
-    Node *root = NULL;
     for (int i = 0; i < n; i++)
     {
-        int x;
         scanf("%d", &x);
-        root = insert(root, x);
+        insert(x);
     }
+
     inorder(root);
     printf("\n");
+
     preorder(root);
     printf("\n");
 

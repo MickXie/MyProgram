@@ -1,18 +1,37 @@
 #include <stdio.h>
+#include <stdlib.h>
+
+#define MAXN 20
+
+typedef struct Node
+{
+    int v;
+    struct Node *next;
+} Node;
 
 int n;
-int adj[1000][1000];
-int visited[1000];
+int matrix[MAXN][MAXN];
+Node *adjList[MAXN];
+int visited[MAXN];
+
+void addEdge(int u, int v)
+{
+    Node *node = (Node *)malloc(sizeof(Node));
+    node->v = v;
+    node->next = adjList[u];
+    adjList[u] = node;
+}
 
 void dfs(int u)
 {
     visited[u] = 1;
-    for (int v = 0; v < n; v++)
+    Node *cur = adjList[u];
+    while (cur != NULL)
     {
-        if (adj[u][v] == 1 && !visited[v])
-        {
+        int v = cur->v;
+        if (!visited[v])
             dfs(v);
-        }
+        cur = cur->next;
     }
 }
 
@@ -21,10 +40,21 @@ int main()
     scanf("%d", &n);
 
     for (int i = 0; i < n; i++)
-    {
         for (int j = 0; j < n; j++)
+            scanf("%d", &matrix[i][j]);
+
+    for (int i = 0; i < n; i++)
+        adjList[i] = NULL;
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = i + 1; j < n; j++)
         {
-            scanf("%d", &adj[i][j]);
+            if (matrix[i][j] == 1)
+            {
+                addEdge(i, j);
+                addEdge(j, i);
+            }
         }
     }
 

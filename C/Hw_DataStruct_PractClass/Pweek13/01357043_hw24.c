@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
-#define MAXV 1000
+#define MAXV 50
 
 typedef struct Node
 {
@@ -11,93 +10,73 @@ typedef struct Node
 } Node;
 
 Node *adj[MAXV];
-int disc[MAXV], low[MAXV], parent[MAXV];
-int visited[MAXV], isAP[MAXV];
-int timeCounter;
-int maxVertex = 0;
+int dfn[MAXV], low[MAXV];
+int isArt[MAXV];
+int timer = 0;
+int maxV = -1;
 
-/* 新增邊 */
 void addEdge(int u, int v)
 {
-    Node *n1 = (Node *)malloc(sizeof(Node));
-    n1->v = v;
-    n1->next = adj[u];
-    adj[u] = n1;
+    Node *a = (Node *)malloc(sizeof(Node));
+    a->v = v;
+    a->next = adj[u];
+    adj[u] = a;
 
-    Node *n2 = (Node *)malloc(sizeof(Node));
-    n2->v = u;
-    n2->next = adj[v];
-    adj[v] = n2;
+    Node *b = (Node *)malloc(sizeof(Node));
+    b->v = u;
+    b->next = adj[v];
+    adj[v] = b;
 }
 
-/* DFS + Tarjan */
-void dfs(int u)
+void dfs(int u, int parent)
 {
-    int children = 0;
-    visited[u] = 1;
-    disc[u] = low[u] = ++timeCounter;
+    dfn[u] = low[u] = ++timer;
+    int childCount = 0;
 
     for (Node *p = adj[u]; p; p = p->next)
     {
         int v = p->v;
-
-        if (!visited[v])
+        if (dfn[v] == 0)
         {
-            children++;
-            parent[v] = u;
-            dfs(v);
-
+            childCount++;
+            dfs(v, u);
             low[u] = (low[u] < low[v]) ? low[u] : low[v];
-
-            /* 非 root */
-            if (parent[u] != -1 && low[v] >= disc[u])
-                isAP[u] = 1;
-
-            /* root */
-            if (parent[u] == -1 && children > 1)
-                isAP[u] = 1;
+            if (parent != -1 && low[v] >= dfn[u])
+                isArt[u] = 1;
         }
-        else if (v != parent[u])
+        else if (v != parent)
         {
-            low[u] = (low[u] < disc[v]) ? low[u] : disc[v];
+            low[u] = (low[u] < dfn[v]) ? low[u] : dfn[v];
         }
     }
+    if (parent == -1 && childCount >= 2)
+        isArt[u] = 1;
 }
 
-int main()
+int main(void)
 {
     int u, v;
-
-    memset(adj, 0, sizeof(adj));
-    memset(visited, 0, sizeof(visited));
-    memset(isAP, 0, sizeof(isAP));
-
-    /* 讀入邊直到 EOF */
+    for (int i = 0; i < MAXV; i++)
+    {
+        adj[i] = NULL;
+        dfn[i] = 0;
+        low[i] = 0;
+        isArt[i] = 0;
+    }
     while (scanf("%d %d", &u, &v) == 2)
     {
         addEdge(u, v);
-        if (u > maxVertex)
-            maxVertex = u;
-        if (v > maxVertex)
-            maxVertex = v;
+        if (u > maxV)
+            maxV = u;
+        if (v > maxV)
+            maxV = v;
     }
-
-    for (int i = 0; i <= maxVertex; i++)
-        parent[i] = -1;
-
-    /* 處理不連通圖 */
-    for (int i = 0; i <= maxVertex; i++)
-    {
-        if (!visited[i] && adj[i])
-            dfs(i);
-    }
-
-    /* 輸出割點 */
-    for (int i = 0; i <= maxVertex; i++)
-    {
-        if (isAP[i])
+    for (int i = 0; i <= maxV; i++)
+        if (dfn[i] == 0 && adj[i] != NULL)
+            dfs(i, -1);
+    for (int i = 0; i <= maxV; i++)
+        if (isArt[i])
             printf("%d ", i);
-    }
     printf("\n");
 
     return 0;

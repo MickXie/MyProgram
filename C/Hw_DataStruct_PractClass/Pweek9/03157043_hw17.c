@@ -1,59 +1,85 @@
 #include <stdio.h>
 #include <string.h>
+
 #define MAXN 20
+#define MAXSIZE 256
+
 typedef struct
 {
-    int x, y, z;
+    int mid;
+    int left;
+    int right;
 } Node;
+
 Node list[MAXN];
-int n;
-int find(int val)
+int tree[MAXSIZE];
+
+int maxIndex;
+int findNode(int x, int n)
 {
     for (int i = 1; i <= n; i++)
-        if (list[i].x == val)
+    {
+        if (list[i].mid == x)
             return i;
+    }
     return 0;
 }
-void inorder(int val)
+void preorder(int root, int n)
 {
-    if (val == 0)
+    if (root == 0)
         return;
-    int idx = find(val);
-    inorder(list[idx].y);
-    printf("%d ", val);
-    inorder(list[idx].z);
+    printf("%d ", root);
+    int id = findNode(root, n);
+    preorder(list[id].left, n);
+    preorder(list[id].right, n);
 }
-void preorder(int val)
+
+void inorder(int root, int n)
 {
-    if (val == 0)
+    if (root == 0)
         return;
-    int idx = find(val);
-    printf("%d ", val);
-    preorder(list[idx].y);
-    preorder(list[idx].z);
+    int id = findNode(root, n);
+    inorder(list[id].left, n);
+    printf("%d ", root);
+    inorder(list[id].right, n);
 }
-void postorder(int val)
+
+void postorder(int root, int n)
 {
-    if (val == 0)
+    if (root == 0)
         return;
-    int idx = find(val);
-    postorder(list[idx].y);
-    postorder(list[idx].z);
-    printf("%d ", val);
+    int id = findNode(root, n);
+    postorder(list[id].left, n);
+    postorder(list[id].right, n);
+    printf("%d ", root);
 }
-int main()
+
+int main(void)
 {
+    int n;
     while (scanf("%d", &n) == 1)
     {
+        memset(tree, 0, sizeof(tree));
+        maxIndex = 1;
         for (int i = 1; i <= n; i++)
-            scanf("%d %d %d", &list[i].x, &list[i].y, &list[i].z);
-        int root = list[1].x;
-        inorder(root);
+        {
+            scanf("%d %d %d",
+                  &list[i].mid,
+                  &list[i].left,
+                  &list[i].right);
+        }
+
+        int root = list[1].mid;
+
+        inorder(root, n);
         printf("\n");
-        preorder(root);
+
+        preorder(root, n);
         printf("\n");
-        postorder(root);
+
+        postorder(root, n);
         printf("\n");
     }
+
     return 0;
 }

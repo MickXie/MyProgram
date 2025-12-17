@@ -1,53 +1,65 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAXV 1000
+#define MAXV 20
 
-int graph[MAXV][MAXV];
-int visited[MAXV];
-int vertexUsed[MAXV];
-int maxVertex = -1;
-
-void DFS(int v)
+typedef struct Node
 {
-    visited[v] = 1;
-    printf("%d ", v);
-    for (int i = 0; i <= maxVertex; i++)
+    int v;
+    struct Node *next;
+} Node;
+
+Node *adjList[MAXV];
+int visited[MAXV];
+int maxV = -1;
+
+void addEdge(int u, int v)
+{
+    Node *node = (Node *)malloc(sizeof(Node));
+    node->v = v;
+    node->next = adjList[u];
+    adjList[u] = node;
+}
+
+void dfs(int u)
+{
+    visited[u] = 1;
+    printf("%d ", u);
+
+    Node *cur = adjList[u];
+    while (cur != NULL)
     {
-        if (graph[v][i] && !visited[i])
-        {
-            DFS(i);
-        }
+        int v = cur->v;
+        if (!visited[v])
+            dfs(v);
+        cur = cur->next;
     }
 }
 
-int main()
+int main(void)
 {
     int u, v;
     for (int i = 0; i < MAXV; i++)
-    {
-        visited[i] = 0;
-        vertexUsed[i] = 0;
-        for (int j = 0; j < MAXV; j++)
-            graph[i][j] = 0;
-    }
+        adjList[i] = NULL;
+
     while (scanf("%d %d", &u, &v) == 2)
     {
-        graph[u][v] = 1;
-        graph[v][u] = 1;
-        vertexUsed[u] = vertexUsed[v] = 1;
-        if (u > maxVertex)
-            maxVertex = u;
-        if (v > maxVertex)
-            maxVertex = v;
+        addEdge(u, v);
+        addEdge(v, u);
+        if (u > maxV)
+            maxV = u;
+        if (v > maxV)
+            maxV = v;
     }
-    for (int i = 0; i <= maxVertex; i++)
+
+    for (int i = 0; i <= maxV; i++)
     {
-        if (vertexUsed[i] && !visited[i])
+        if (!visited[i] && adjList[i] != NULL)
         {
-            DFS(i);
+            dfs(i);
             printf("\n");
         }
     }
+
     return 0;
 }

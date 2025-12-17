@@ -2,63 +2,69 @@
 #include <string.h>
 
 #define MAXN 20
-#define MAXSIZE 300
+#define MAXSIZE 256
 
 typedef struct
 {
-    int x, y, z;
+    int mid;
+    int left;
+    int right;
 } Node;
 
 Node list[MAXN];
 int tree[MAXSIZE];
 
-int find(int x, int n)
+int maxIndex;
+int findNode(int x, int n)
 {
     for (int i = 1; i <= n; i++)
-        if (list[i].x == x)
+    {
+        if (list[i].mid == x)
             return i;
+    }
     return 0;
 }
-
 void build(int rootVal, int pos, int n)
 {
-    if (rootVal == 0)
+    if (rootVal == 0 || pos >= MAXSIZE)
         return;
-    tree[pos] = rootVal;
-    int id = find(rootVal, n);
 
+    tree[pos] = rootVal;
+    if (pos > maxIndex)
+        maxIndex = pos;
+
+    int id = findNode(rootVal, n);
     if (id == 0)
         return;
 
-    build(list[id].y, pos * 2, n);
-    build(list[id].z, pos * 2 + 1, n);
+    build(list[id].left, pos * 2, n);
+    build(list[id].right, pos * 2 + 1, n);
 }
 
-int main()
+int main(void)
 {
     int n;
     while (scanf("%d", &n) == 1)
     {
-
-        for (int i = 1; i <= n; i++)
-            scanf("%d %d %d", &list[i].x, &list[i].y, &list[i].z);
-
         memset(tree, 0, sizeof(tree));
+        maxIndex = 1;
+        for (int i = 1; i <= n; i++)
+        {
+            scanf("%d %d %d",
+                  &list[i].mid,
+                  &list[i].left,
+                  &list[i].right);
+        }
 
-        int root = list[1].x;
-
-        build(root, 1, n);
-        int maxIndex = 1;
-        for (int i = 1; i < MAXSIZE; i++)
-            if (tree[i] != 0)
-                maxIndex = i;
+        build(list[1].mid, 1, n);
         for (int i = 1; i <= maxIndex; i++)
         {
-            printf("%d", tree[i]);
-            if (i != maxIndex)
+            if (i > 1)
                 printf(" ");
+            printf("%d", tree[i]);
         }
         printf("\n");
     }
+
     return 0;
 }

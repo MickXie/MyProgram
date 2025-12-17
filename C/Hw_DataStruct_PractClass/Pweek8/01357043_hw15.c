@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
-int ok(int k, int m)
+#include <stdbool.h>
+bool ok(int k, int m)
 {
     int remain = 2 * k;
     int idx = 0;
@@ -8,10 +9,10 @@ int ok(int k, int m)
     {
         idx = (idx + m - 1) % remain;
         if (idx < k)
-            return 0;
+            return false;
         remain--;
     }
-    return 1;
+    return true;
 }
 int solve(int k)
 {
