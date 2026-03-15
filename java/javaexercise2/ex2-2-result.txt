@@ -1,0 +1,79 @@
+package ntou.cs.java2026;
+
+import java.io.IOException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+public class BookParser {
+
+    public Book parseBook(String url) throws IOException {
+        Document doc = Jsoup.connect(url).get();
+
+        String title = getTitle(doc);
+        String author = getInfoboxValue(doc, "Author");
+        String publisher = getInfoboxValue(doc, "Publisher");
+        String publicationDate = getPublicationYear(doc);
+        String plotSummary = getPlotSummary(doc);
+
+        return new Book(title, author, publisher, publicationDate, plotSummary);
+    }
+
+    private String getTitle(Document doc) {
+        Element titleElement = doc.selectFirst("#firstHeading");
+        if (titleElement != null) {
+            return titleElement.text().trim();
+        }
+        return "N/A";
+    }
+
+    private String getInfoboxValue(Document doc, String label) {
+        Elements rows = doc.select("table.infobox tr");
+
+        for (Element row : rows) {
+            Element th = row.selectFirst("th");
+            Element td = row.selectFirst("td");
+
+            if (th != null && td != null && th.text().trim().equalsIgnoreCase(label)) {
+                return td.text().trim();
+            }
+        }
+
+        return "N/A";
+    }
+
+    private String getPublicationYear(Document doc) {
+        String publishedText = getInfoboxValue(doc, "Published");
+
+        if (publishedText.equals("N/A")) {
+            return "N/A";
+        }
+        for (int i = 0; i <= publishedText.length() - 4; i++) {
+            char c1 = publishedText.charAt(i);
+            char c2 = publishedText.charAt(i + 1);
+            char c3 = publishedText.charAt(i + 2);
+            char c4 = publishedText.charAt(i + 3);
+
+            if (Character.isDigit(c1) && Character.isDigit(c2)
+                    && Character.isDigit(c3) && Character.isDigit(c4)) {
+                return publishedText.substring(i, i + 4);
+            }
+        }
+
+        return publishedText;
+    }
+
+    private String getPlotSummary(Document doc) {
+        Elements paragraphs = doc.select("div.mw-parser-output > p");
+
+        for (Element p : paragraphs) {
+            String text = p.text().trim();
+            if (!text.isEmpty()) {
+                return text;
+            }
+        }
+
+        return "N/A";
+    }
+}
