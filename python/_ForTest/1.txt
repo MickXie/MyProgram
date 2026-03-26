@@ -1,0 +1,266 @@
+我在本專案中主要負責 資料前處理（Data Processing）與數值分析（Numerical Analysis），確保從 Yahoo Finance 下載的原始股價資料，能夠：
+
+轉換成一致、乾淨、可計算的格式
+
+避免 pandas / NumPy 型態錯誤
+
+正確計算技術指標（RSI）與統計量
+
+提供穩定資料給後續視覺化與比較分析
+
+二、使用的函式庫與其角色
+1. pandas（資料結構與清洗）
+import pandas as pd
+
+
+用途
+
+儲存股價時間序列（DataFrame）
+
+處理時間索引（DatetimeIndex）
+
+提供 rolling、diff、clip 等金融分析常用操作
+
+專案中使用重點
+
+DataFrame
+
+Series
+
+rolling()
+
+diff()
+
+to_numeric()
+
+2. NumPy（數值運算核心）
+import numpy as np
+
+
+用途
+
+提供高效能數值計算
+
+計算平均值、標準差、波動率
+
+專案中使用重點
+
+np.mean()
+
+np.std()
+
+與 pandas .to_numpy() 搭配使用
+
+三、資料前處理與格式標準化（OHLCV）
+為什麼一定要做資料清洗？
+
+從 yfinance.download() 下載的資料 不保證格式一致，常見問題包含：
+
+MultiIndex 欄位
+
+('Close', '2330.TW')
+
+
+同一欄位有時是 Series，有時是 DataFrame
+
+數值型態混亂（object / string）
+
+Index 不是 DatetimeIndex
+
+存在 NaN 導致技術指標計算錯誤
+
+👉 若不先處理，後續 NumPy 計算與 RSI 會直接報錯或產生錯誤結果。
+
+四、OHLCV 標準化核心函式
+normalize_ohlcv_for_analysis()
+def normalize_ohlcv_for_analysis(stock: pd.DataFrame) -> pd.DataFrame:
+
+函式目的
+
+將 yfinance 原始資料轉為：
+
+單層欄位（Open / High / Low / Close / Volume）
+
+每欄皆為 1D Series
+
+全部為 float
+
+Index 為 DatetimeIndex
+
+不含 NaN
+
+1️⃣ 處理 MultiIndex 欄位
+def _flatten_yfinance_columns(df):
+    if isinstance(df.columns, pd.MultiIndex):
+        df.columns = df.columns.get_level_values(0)
+
+
+問題說明
+
+yfinance 常回傳 MultiIndex（欄位 × 股票代號）
+
+df["Close"] 會失效
+
+解法
+
+只保留第一層欄位名稱
+
+統一成 ["Open", "High", "Low", "Close", "Volume"]
+
+2️⃣ 解決 Series / DataFrame 混用問題
+def _ensure_1d_series(x):
+    if isinstance(x, pd.DataFrame):
+        return x.iloc[:, 0]
+    return x
+
+
+問題說明
+
+df["Close"] 有時回傳 DataFrame
+
+NumPy 計算需要 1D array
+
+解法
+
+強制轉為 Series
+
+確保 .to_numpy() 能正常運作
+
+3️⃣ 數值轉換與 NaN 清除
+ohlcv[c] = pd.to_numeric(s, errors="coerce")
+ohlcv.dropna(inplace=True)
+
+
+說明
+
+將字串轉為 float
+
+無法轉換的值變成 NaN
+
+最後統一移除，避免 RSI 錯誤
+
+回傳值
+return ohlcv
+
+
+回傳
+
+乾淨、穩定、可分析的 OHLCV DataFrame
+
+五、NumPy 數值分析應用
+1️⃣ 平均收盤價
+avg_close = np.mean(ohlcv["Close"].to_numpy())
+
+
+.to_numpy()：轉為 NumPy array
+
+np.mean()：計算平均值
+
+2️⃣ 成交量標準差
+std_volume = np.std(ohlcv["Volume"].to_numpy())
+
+
+衡量成交量波動程度
+
+用於判斷市場活躍度穩定性
+
+3️⃣ 波動率（Volatility）
+volatility = np.std(ohlcv["Close"].pct_change().dropna()) * 100
+
+
+流程
+
+pct_change() → 日報酬率
+
+dropna() → 移除第一天 NaN
+
+np.std() → 標準差
+
+* 100 → 百分比表示
+
+六、RSI 技術指標計算（14 日）
+RSI 計算公式
+𝑅
+𝑆
+𝐼
+=
+100
+−
+100
+1
++
+𝑅
+𝑆
+RSI=100−
+1+RS
+100
+	​
+
+𝑅
+𝑆
+=
+平均上漲
+平均下跌
+RS=
+平均下跌
+平均上漲
+	​
+
+RSI 計算流程（對應程式碼）
+delta = close.diff()
+gain = delta.clip(lower=0)
+loss = (-delta).clip(lower=0)
+
+步驟	說明
+delta	每日漲跌
+gain	只保留上漲
+loss	只保留下跌
+avg_gain = gain.rolling(14).mean()
+avg_loss = loss.rolling(14).mean()
+
+
+為什麼用 rolling mean？
+
+RSI 是「一段期間的平均動能」
+
+rolling window = 14 日是金融分析標準
+
+rs = avg_gain / avg_loss
+rsi = 100 - (100 / (1 + rs))
+
+超買 / 超賣判斷依據
+RSI 值	判斷
+> 70	超買（可能回檔）
+< 30	超賣（可能反彈）
+30–70	正常區間
+七、成果展示（可放報告截圖）
+表格指標
+指標	說明
+最高價	期間 High 最大值
+最低價	期間 Low 最小值
+報酬率	(期末 / 期初 − 1)
+RSI	14 日相對強弱指標
+RSI 計算流程圖（老師很愛）
+Close Price
+   ↓ diff()
+Daily Change
+   ↓ clip()
+Gain / Loss
+   ↓ rolling mean(14)
+Avg Gain / Avg Loss
+   ↓ RS
+RSI
+
+八、總結（可當結語）
+
+我負責的資料清洗與數值分析模組，確保：
+
+所有股價資料格式一致
+
+NumPy 與 pandas 計算穩定
+
+技術指標（RSI）符合金融標準
+
+後續視覺化與比較分析不會出錯
+
+這讓整個台股分析系統在 正確性、可維護性與擴充性 上都更可靠。    
