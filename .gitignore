@@ -3,6 +3,20 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# macOS
+.DS_Store
+
+# Compiled binaries
+*.exe
+*.o
+*.out
+
+# Java compiled
+*.class
+
+# VSCode temp
+tempCodeRunnerFile.*
+
 # User-specific files
 *.rsuser
 *.suo

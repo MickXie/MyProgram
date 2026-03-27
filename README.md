@@ -1,125 +1,161 @@
-# Practicing - 實踐學習筆記
+# MyProgram — 程式學習資料庫
 
-*Just for learn*
-
-學習編程是一個持續探索和實踐的過程，這份筆記旨在記錄我在使用 VSCode、C++、Python 等工具時的一些技巧與心得。希望這些內容也能對你有所幫助！
-
-!!!此檔案專門for vscode , 因此c#類的vs2022的內容並不在這
----
-
-# MyProgram 學習資料夾總覽
-
-歡迎來到 **MyProgram** 學習資料夾！這裡收錄了你在學習程式設計、VSCode 使用、C++/Python 開發等過程中的筆記、範例程式與實用資源。無論你是初學者還是進階使用者，都能在這裡找到提升效率與技能的好方法。
+這是我在**國立臺灣海洋大學 (NTOU)** 就讀期間的個人程式學習與課程作業倉庫，涵蓋多種程式語言、資料結構、演算法、人工智慧與網頁開發。
 
 ---
 
-## 目錄結構說明
+## 目錄總覽
 
-- `C++/NTOU_Homework/`  
-  國立臺灣海洋大學 C++ 課程作業專區，包含各種撲克牌機率、日期類別等經典題目程式碼，適合練習 C++ STL、類別設計與演算法。
-- `README.md`  
-  本說明文件，彙整 VSCode 快速鍵、配置、擴展推薦，以及學習資源與美化技巧。
-- 其他資料夾/檔案  
-  依照不同語言或主題分類，方便管理與查找。
-
----
-
-## VSCode 快速鍵與配置
-
-### 常用快速鍵
-
-- `Ctrl + F`：搜尋文件內容
-- `Ctrl + H`：批次取代
-- `Shift + Ctrl + P`：指令面板
-- `Ctrl + P`：快速開檔
-- `F2`：重命名變數/函數
-- `Ctrl + /`：註解/取消註解
-- `Alt + ↑/↓`：移動程式碼行
-- `Shift + Alt + F`：自動格式化
-- `Ctrl + D`：多重選取
-
-> **小貼士**：善用快速鍵能大幅提升開發效率，建議多加練習！
-
-### 推薦設定
-
-- `settings.json` 中加入：
-    - `"editor.tabSize": 4`：縮排 4 空格
-    - `"editor.fontSize": 16`：字體大小
-- 主題切換：`Ctrl + K, Ctrl + T` 選擇喜歡的主題（如 Dark+、Monokai）
-
-### 推薦擴展
-
-- **Python**：語法高亮、補全、除錯
-- **Code Runner**：一鍵執行程式片段
-- **Bracket Pair Colorizer**：括號配色
-- **Auto Rename Tag**：同步修改 HTML/XML 標籤
-
-#### 前端套件組
-- **Auto close tag**
-- **Auto import**
-- **shift alt f 設定 pretter**
-- **HTML Snippets**
-- **Live Server**
-- **indent-rainbow**
-- **ESLint**
-- **Path Intellisense**
-- **Html CSS Support**
-- **Image preview**
-- **Smart CSS Autocomplete**
-- **HTML to CSS Autocompletion**
-- **JavaScript (ES6) code snippets**
-- https://github.com/logeshpaul/Frontend-Cheat-Sheets.git
- 
----
-
-## C++/Python 實作與練習
-
-### C++ 作業範例
-
-- 撲克牌機率模擬（如同花、順子、葫蘆等判斷）
-- 日期類別設計與例外處理
-- STL 容器與演算法應用
-- 其他經典題目（可依課程進度擴充）
-
-> **小貼士**：每個作業都可作為練習物件導向、演算法與 STL 的好素材。
-
-### Python 練習（如有）
-
-- 基本語法、資料結構
-- 小型專案（如待辦清單、計算器）
-- 練習腳本與自動化工具
-
-### 推薦資源
-
-- [W3Schools](https://www.w3schools.com/)：網頁開發入門
-- [CS50](https://cs50.harvard.edu/)：哈佛免費程式課程
-- [C++ Reference](https://en.cppreference.com/)：C++ 標準函式庫查詢
-- [Python 官方文件](https://docs.python.org/zh-tw/3/)：Python 說明文件
-- YouTube 搜尋「VSCode Tips」：實用技巧影片
-
-> **小貼士**：學習新工具時，動手實作最有效！
+| 區域 | 語言 | 說明 |
+|------|------|------|
+| [C++ Primer](./cpp/cpp-primer/) | C++ | 教科書《C++ Primer 第5版》第 1–19 章練習 |
+| [NTOU C++ 作業](./cpp/ntou-homework/) | C++ | 課程作業 — 撲克牌機率、遊戲、物件導向設計 |
+| [APCS 競程練習](./cpp/apcs-practice/) | C++ | APCS 檢定與競程題目練習 |
+| [資料結構作業](./c/data-structures/) | C | 課程作業 — 鏈結串列、樹狀結構、排序演算法 |
+| [資料結構實習](./c/data-structures-practice/) | C | 實習課練習（第 1–14 週） |
+| [人工智慧導論](./courses/intro-to-ai/) | C++ | 15格拼圖 A\* 搜尋求解（4 部分作業） |
+| [網頁程式設計](./web/web-programming/) | HTML/CSS/JS | 課程作業（Exercise 1–11） |
+| [Scoreboard App](./web/scoreboard/) | React/Vite | 獨立 React 應用程式子專案 |
+| [NTOU Python 課程](./python/ntou-python/) | Python | 教科書練習（第 1–12 章）＋作業 |
+| [NTOU Java 課程](./java/ntou/cs/java2026/) | Java | 物件導向練習 — BMI、撲克、員工、書單解析 |
+| [Java 自學](./java/self-study/) | Java | 個人自學，與課程完全分開 |
+| [MATLAB](./courses/matlab/) | MATLAB | 工程計算作業 |
 
 ---
 
-## 美化與格式建議
+## 目錄結構
 
-- 標題用 `#`，重點用 `**粗體**` 或 `_斜體_`
-- 用 `-` 或 `*` 條列重點
-- 用 `---` 分隔章節
-- 用 `>` 引用區塊強調小貼士
-- 超連結方便跳轉
-- 建議每個程式檔案加上註解，說明功能與用法
+```
+MyProgram/
+├── cpp/
+│   ├── cpp-primer/              # C++ Primer 教科書練習，第 1–19 章
+│   ├── ntou-homework/           # NTOU C++ 課程作業
+│   └── apcs-practice/          # APCS 競程練習題
+│
+├── c/
+│   ├── data-structures/         # 資料結構課程作業（C 語言）
+│   └── data-structures-practice/ # 資料結構實習課（14 週）
+│
+├── java/
+│   ├── ntou/cs/java2026/        # NTOU Java 課程（package ntou.cs.java2026）
+│   │   └── docs/                # 截圖與作業繳交壓縮檔
+│   └── self-study/              # 個人自學 Java（無 package 宣告）
+│
+├── python/
+│   ├── ntou-python/             # NTOU Python 課程，第 1–12 章
+│   └── experiments/             # Python 個人測試與練習
+│
+├── web/
+│   ├── web-programming/         # 網頁程式設計課程作業，Exercise 1–11
+│   ├── scoreboard/              # React + Vite 記分板應用程式
+│   └── experiments/             # HTML/CSS/JS 個人測試
+│
+└── courses/
+    ├── intro-to-ai/             # 人工智慧導論 — 15格拼圖 A* 求解器
+    └── matlab/                  # MATLAB 作業
+```
 
 ---
 
-## 進階補充
+## 重點子專案
 
-- **C++/NTOU_Homework**：建議每個作業檔案都加上註解，說明題目來源、重點解法與測試方式。
-- **Python 專案**：可建立 `requirements.txt` 或 `venv` 虛擬環境，方便管理套件。
-- **VSCode 設定**：可將常用設定與快捷鍵同步到雲端，方便多台電腦共用。
-- **學習歷程**：建議每週記錄一次學習心得或遇到的問題，方便回顧與成長。
-- **擴充資料夾**：如有新主題或語言，建議新增對應資料夾並於此說明文件補充介紹。
+### 15格拼圖 AI 求解器
+**位置：** [`courses/intro-to-ai/`](./courses/intro-to-ai/)
+**語言：** C++
+四部分的 A\* 搜尋演算法作業，涵蓋：可解性判斷、後繼節點生成、曼哈頓距離啟發函數、自製優先佇列。
+
+### Scoreboard React App
+**位置：** [`web/scoreboard/`](./web/scoreboard/)
+**技術：** React 18 + Vite + ESLint
+
+```bash
+cd web/scoreboard
+npm install
+npm run dev
+```
+
+### NTOU Java 2026 — 物件導向練習
+**位置：** [`java/ntou/cs/java2026/`](./java/ntou/cs/java2026/)
+**語言：** Java（`package ntou.cs.java2026`）
+
+```bash
+# 從 java/ 根目錄執行
+javac -cp jsoup-1.22.1.jar ntou/cs/java2026/BMICalculator.java
+java -cp .:jsoup-1.22.1.jar ntou.cs.java2026.BMICalculator
+```
 
 ---
 
-**保持熱情，享受編程的樂趣！歡迎隨時補充與修正這份筆記，讓它成為你專屬的學習地圖。**
+## 技術棧
+
+- **語言：** C++17、C、Java、Python 3、JavaScript、HTML5、CSS3、MATLAB
+- **框架/工具：** React 18、Vite、Node.js、jsoup
+- **建置工具：** Make（C++ Primer）、g++、javac
+- **IDE：** VS Code、Visual Studio 2022
+
+---
+
+## 新增檔案規則
+
+> 在新增任何檔案之前，請遵守以下規範，確保倉庫維持一致且整潔。
+
+### 1. 放對資料夾
+
+| 情境 | 放置位置 |
+|------|----------|
+| C++ 課程作業 | `cpp/ntou-homework/` |
+| C++ 教科書練習 | `cpp/cpp-primer/` 對應章節資料夾 |
+| APCS 題目 | `cpp/apcs-practice/` |
+| C 資料結構正課作業 | `c/data-structures/` |
+| C 資料結構實習作業 | `c/data-structures-practice/` 對應週次 |
+| 學校 Java 作業 | `java/ntou/cs/java2026/`（需加 `package ntou.cs.java2026;`） |
+| 個人自學 Java | `java/self-study/`（不需要 package） |
+| Python 課程練習 | `python/ntou-python/` 對應章節或 `Homework/` |
+| Python 個人測試 | `python/experiments/` |
+| 網頁課程作業 | `web/web-programming/` |
+| HTML/CSS/JS 個人練習 | `web/experiments/` |
+| 跨語言課程大作業 | `courses/` 下新建子資料夾 |
+
+### 2. 命名規範
+
+- **資料夾：** 使用全小寫 + 連字號，例如 `my-project/`
+- **C/C++ 檔案：** 使用學校格式（如 `01357043_hw1.c`）或描述性名稱
+- **Java 檔案：** 使用 `PascalCase`，例如 `MyClass.java`
+- **Python 檔案：** 使用 `snake_case`，例如 `my_script.py`
+- **避免** 空格、中文、特殊符號出現在路徑或檔名中
+
+### 3. 絕對不可 commit 的檔案
+
+- `*.exe` — Windows 編譯產物
+- `*.class` — Java 編譯產物
+- `*.o`、`*.out` — C/C++ 編譯產物
+- `node_modules/` — npm 套件
+- `__pycache__/`、`*.pyc` — Python 快取
+- `tempCodeRunnerFile.*` — VSCode 暫存檔
+- `.DS_Store` — macOS 系統檔
+
+### 4. 新增課程或語言
+
+若開始一門全新課程，請在對應語言資料夾下建立子資料夾，並更新本 README 最上方的**目錄總覽**表格。
+
+---
+
+## 學習背景
+
+本倉庫記錄在**國立臺灣海洋大學資訊工程學系**修課期間的課程作業與個人自學內容，包括：
+
+- 教科書練習（《C++ Primer 第5版》）
+- 各科課程評分作業
+- APCS 競程練習
+- 個人實驗與測試專案
+
+> 所有程式碼均為個人原創，另有說明者除外。
+
+---
+
+## 如何使用本倉庫
+
+- **想學特定語言？** 直接進入語言資料夾（`cpp/`、`c/`、`java/`、`python/`、`web/`）。
+- **找課程作業？** 查看 `courses/` 或各語言資料夾下的課程子目錄。
+- **想直接跑程式？** 參考上方[重點子專案](#重點子專案)的執行說明。
+- **想自學 Java？** 從 [`java/self-study/`](./java/self-study/) 開始。
