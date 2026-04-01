@@ -463,3 +463,129 @@ String s2 = s1 + " World";  // s1 沒有被改變，產生新的 String 物件
 ---
 
 還有兩個主題沒教完，繼續嗎？
+
+static = 屬於類別 (class)，不是屬於物件 (object)
+java執行程式時從mian但main沒有物件故需要static讓他能直接執行main
+
+print 不換行繼續印
+println 換行印
+printf 可以放%d%s之類的
+補:%n換行,輸入一個字串換行%s%n
+
+Scanner是一個類別 
+Scanner input(變數名稱) = new Scanner(System.in)
+Scanner用來讀取輸入 
+input 是輸入的變數 
+new 表新建立一個物件 
+Scanner(…)呼叫Scanner的建構子 
+也就是： 建立一個叫做 input 的物件， 這個物件是用 Scanner 類別做出來的， 並且讓它去讀取 System.in（鍵盤輸入）。 
+
+.nextInt() 轉成整數型態 
+
+Import不等於Include 
+Import可以讓程式裡的類別內容例如Scanner 全名是Java.util.Scanner加了 import java.util.Scanner 就可以只寫Scanner 
+
+java.lang例如：java.lang.System不需要import java會自己做 
+可以寫這樣例：import.java.lang.*會包含全部 
+
+Long要用l或L結尾 例：1000000000L 
+Float要用F,f結尾 
+Double要用D,d結尾 
+浮點數以double(整數以int為主)為主後面不加d不會錯但宣告float後面一定要加f
+整數可轉浮點數，反過來不行
+只能例:x = int(10.5)
+long x = 100無誤差
+double x = 5.4f 可能有誤差
+整數轉浮點float x = 500000f;可能有誤差
+
+input.next()
+只讀到下一個空白前的內容。
+input.nextLine()
+會讀取整整一行，直到你按 Enter 為止。
+
+有自己設定的建構子就要填好裡面的東西不能new空的 例：
+public class Account { 
+public Account(string name){ 
+這裡面就是 
+} 
+} 
+這個建構子他不會回傳任何值 
+
+javac -d . *.java快速建立你所設定的package ，裝package執行要用全名
+若要自行把函式庫裝進你的專案裡，指令:
+Javac -classpath .;(檔案名稱) -d . (-d.若有package)*.java
+執行時:
+Java -classpath .;(檔案名稱) (類別名稱)
+適用於小型函示庫
+
+@Override繼承父類，如果有拼錯會報錯防止你引用到錯誤的函數
+
+throws IOException抓網頁如果抓網頁失敗可能丟出 IOException
+
+break直接中斷此迴圈continue中斷目前迴圈
+
+final只能給值一次之後不能更改
+
+一般物件類型的函式，需要有一個具體物件才可以呼叫，static可以讓韓式變成類別型態可以不用一個具體的物件就能呼叫
+
+亂數:import.java.security.SecureRandom
+Private static final SecureRandom randomNumbers(變數名稱) = new SecureRandom();
+.nextInt(6):0-5
+
+列舉固定型態:
+Public/private enum dice(變數名稱) {1,2,3,4,5,6};
+
+標準化數字格式100000->100,000
+import java.text.NumberFormat;
+NumberFormat nf = NumberFormat.getInstance();
+nf.format(變數)
+
+class用來宣告類別 只有一開始用 類別裡的方法不需要class 
+沒有static的方法 我在自己的類別中想呼叫 要先用自己的類別創建一個物件才可以使用 
+宣告陣列： int c[]; 
+c = new int[12]; 
+要設定好才能用： 
+int [] c = new int[12]; 
+給值： int[] c = {0,1,2,3}; 
+陣列new完長度固定 
+
+例外處理： 
+try{ 
+    程式主邏輯 
+    throw new NullPointerException();
+｝ 
+catch(例外物件）{ 
+    Handle
+} 
+
+印物件compiler會補.toString，我們可以藉由@Override去改寫Object的toString來達到我們希望的輸出樣子
+
+Enhance:
+Int [] array = {10,20,32,56,41,82};
+for(int (變數)number : array){
+    主程式;
+}
+他會跑六次，每次把array的元素照順序站存到number
+
+陣列丟進方法裡(int[] array)丟的是本人出來會變
+陣列丟進方法裡(int element)丟的是值出來原本不會改變
+若是類別型態算是reference改了會變
+
+多維
+Int[][]b = {{1,2},{3,4}};
+
+This可以用來呼叫另一個建構子
+Public class time{
+    Private int hour;
+    Private int minute;
+    Private int second;
+    Public time(){
+        This(0,0,0);
+    }
+    Public time(int hour){
+        This(hour,0,0);
+    }
+
+Public time(Time time){ DeepCopy
+    This(time.getHour(), time.getMinute(), time.getSecond());
+}
