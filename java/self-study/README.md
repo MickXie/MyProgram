@@ -157,3 +157,70 @@ Method Overloading：
 同名不同 parameter list
 signature = 名稱 + parameter 數量/型別/順序
 return type 不是 signature 的一部分，不能只靠 return type 區分
+
+# Chapter 7 Part 1 全部完成
+
+這份 PDF 69 頁全部教完了。我幫你整理這章的重點知識清單：
+Chapter 7 你已掌握的重點：
+
+Array 是物件（reference type），建立後長度固定（final length）
+array.length（field，無括號）vs String.length()（method，有括號）
+Index 只接受 int/byte/short/char，long 不行
+用 new 建立：new int[10]；用 initializer list：{1,2,3} 只能在宣告同行用
+分開寫要用 new int[]{1,2,3}
+陣列元素一定有預設值（數值→0、boolean→false、reference→null），即使是 local variable 參考的陣列
+ArrayIndexOutOfBoundsException：index 超出範圍（Java 自動做 bounds checking，C++ 不會）
+NullPointerException：對 null 呼叫方法
+try-catch 處理例外，try 裡的 local variable 在 catch 裡 out of scope
+物件陣列 new Card[52] 只建立 52 個 null reference，不是 52 個物件
+toString() 是 Object 的 method，println 和 + 串接時自動呼叫
+Enhanced for：只能讀不能改、沒有 index
+Java 全部都是 pass-by-value：傳 reference type 時複製的是 reference，可以改內容但不能改指向
+二維陣列本質是「陣列的陣列」，允許 ragged array（每 row 長度不同）
+new int[2][] ✅、new int[][3] ❌（必須先指定 row）
+array.length = row 數、array[row].length = 該 row 的 column 數
+
+# Chapter 7 Part 2 全部 29 頁完成
+
+本章重點整理
+Variable-Length Argument Lists（varargs）
+
+語法：type... varName，在 method 內當陣列用
+... 只能放在 parameter list 最後面，只能有一個
+呼叫時可以直接傳個別值，Java 自動包成陣列
+
+Command-Line Arguments
+
+main(String[] args) 接收命令列參數
+全部都是 String，要用數字必須 Integer.parseInt() 轉換
+參數用空白分隔，args.length 取得數量
+
+Class Arrays
+
+Arrays.sort(arr) — 排序，直接修改原陣列
+Arrays.fill(arr, value) — 全部填同一個值
+Arrays.equals(a, b) — 比較內容，不是比較 reference
+Arrays.binarySearch(arr, value) — 找到回傳 index（≥0），找不到回傳負數，使用前必須先 sort
+System.arraycopy(src, srcPos, dest, destPos, length) — 複製陣列
+
+ArrayList
+
+動態大小，需要 import java.util.ArrayList
+只能裝 reference type，int 要用 Integer
+size() 有括號（vs array 的 length 無括號）
+add(value) 加到最後、add(index, value) 插入指定位置
+remove(value) 刪值、remove(index) 刪位置
+Diamond <> 語法：new ArrayList<>() 讓編譯器自動推斷型別
+
+Labeled break
+
+普通 break 只跳出最內層
+break 標籤名稱 可以跳出外層迴圈
+label 放在要跳出的 statement 前面
+
+Map and HashMap
+
+Key-value 配對，key 不能重複（重複會覆蓋）
+put(key, value)、get(key)、containsKey(key)、remove(key)
+get() 找不到 key 回傳 null，不報錯
+型別參數只能用 reference type
