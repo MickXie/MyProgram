@@ -30,5 +30,6 @@ public class BMICalculator {
         }
         System.out.println("Your BMI is " + String.format("%.1f", bmiRounded) + " (" + category + ")");
         input.close();
+        
     }
 }
