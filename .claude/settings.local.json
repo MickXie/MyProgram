@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(cd /tmp)",
+      "Bash(gcc \"c:/Users/mickx/Desktop/MyProgram/courses/algorithms/greedy/2_2_Add_All.c\" -o add_all)",
+      "Bash(printf \"2\\\\n3\\\\n1 2 3\\\\n4\\\\n1 2 3 4\\\\n\")",
+      "Bash(./add_all)",
+      "Bash(printf \"2\\\\n2\\\\n6 33\\\\n4\\\\n22 39 24 87\\\\n\")",
+      "Bash(gcc \"c:/Users/mickx/Desktop/MyProgram/courses/algorithms/greedy/2_3_Bakers_Dilemma.c\" -o baker)",
+      "Bash(printf \"4\\\\n3 4\\\\n1 1000\\\\n2 2\\\\n5 5\\\\n\")",
+      "Bash(./baker)",
+      "Bash(printf \"5\\\\n3 4\\\\n1 1000\\\\n8 8\\\\n2 2\\\\n5 6\\\\n\")",
+      "Bash(gcc \"c:/Users/mickx/Desktop/MyProgram/courses/algorithms/3_1_knapsack_problem.c\" -o knapsack)",
+      "Bash(printf \"4 10\\\\n6 10\\\\n3 7\\\\n4 5\\\\n2 3\\\\n\")",
+      "Bash(./knapsack)",
+      "Bash(printf \"3 5\\\\n2 3\\\\n3 4\\\\n4 5\\\\n\")",
+      "Bash(printf \"1 10\\\\n5 20\\\\n\")"
+    ]
+  }
+}
